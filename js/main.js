@@ -9,26 +9,27 @@ var mapPins = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getRandomHousingType = function (types) {
-  var randomIndex = Math.floor(Math.random() * types.length);
-  return types[randomIndex];
-};
-
-var mocksGeneration = function (mocksNumber) {
+var generateMocks = function (mocksNumber) {
   var mocks = [];
   for (var i = 0; i < mocksNumber; i++) {
-    var mock = {};
-    mock.author = {};
-    mock.offer = {};
-    mock.location = {};
-    mock.author.avatar = 'img/avatars/user0' + (i + 1) + '.png';
-    mock.offer.type = getRandomHousingType(housingTypes);
-    mock.location.x = getRandomNumber(0, 1200);
-    mock.location.y = getRandomNumber(130, 630);
-    mocks[i] = mock;
+    var mock = {
+      author: {
+        avatar: 'img/avatars/user0' + (i + 1) + '.png',
+      },
+      offer: {
+        type: housingTypes[getRandomNumber(0, housingTypes.length)],
+      },
+      location: {
+        x: getRandomNumber(0, 1200),
+        y: getRandomNumber(130, 630),
+      }
+    };
+    mocks.push(mock);
   }
   return mocks;
 };
@@ -51,5 +52,5 @@ var renderPins = function (pinsNumber) {
 };
 
 map.classList.remove('map--faded');
-var marketOffers = mocksGeneration(8);
+var marketOffers = generateMocks(8);
 renderPins(marketOffers);
