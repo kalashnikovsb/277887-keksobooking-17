@@ -22,7 +22,7 @@ var generateMocks = function (mocksNumber) {
         avatar: 'img/avatars/user0' + (i + 1) + '.png',
       },
       offer: {
-        type: housingTypes[getRandomNumber(0, housingTypes.length)],
+        type: housingTypes[getRandomNumber(0, housingTypes.length - 1)],
       },
       location: {
         x: getRandomNumber(0, 1200),
