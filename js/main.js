@@ -4,6 +4,10 @@ var PIN_SIZE_X = 50;
 var PIN_SIZE_Y = 70;
 var housingTypes = ['palace', 'flat', 'house', 'bungalo'];
 
+var map = document.querySelector('.map');
+var mapPins = document.querySelector('.map__pins');
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -29,7 +33,7 @@ var mocksGeneration = function (mocksNumber) {
   return mocks;
 };
 
-var renderPin = function (pin) {
+var createPin = function (pin) {
   var pinItem = pinTemplate.cloneNode(true);
   var pinImg = pinItem.querySelector('img');
   pinItem.style = 'left: ' + (pin.location.x - (PIN_SIZE_X / 2)) + 'px; top: ' + (pin.location.y - PIN_SIZE_Y) + 'px;';
@@ -38,17 +42,14 @@ var renderPin = function (pin) {
   return pinItem;
 };
 
-var copyPins = function () {
+var renderPins = function (pinsNumber) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < marketOffers.length; i++) {
-    fragment.appendChild(renderPin(marketOffers[i]));
+  for (var i = 0; i < pinsNumber.length; i++) {
+    fragment.appendChild(createPin(pinsNumber[i]));
   }
   mapPins.appendChild(fragment);
 };
 
-var marketOffers = mocksGeneration(8);
-var map = document.querySelector('.map');
 map.classList.remove('map--faded');
-var mapPins = document.querySelector('.map__pins');
-var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-copyPins();
+var marketOffers = mocksGeneration(8);
+renderPins(marketOffers);
