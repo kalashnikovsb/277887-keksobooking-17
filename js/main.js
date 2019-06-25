@@ -9,17 +9,18 @@ var mapPins = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPinMain = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var adFormElements = document.querySelectorAll('.ad-form fieldset');
+var adFormElements = document.querySelectorAll('.ad-form__element, .ad-form-header');
 var filterFormElements = document.querySelectorAll('.map__filters > *');
 var addressField = document.querySelector('input#address');
+var marketOffers = generateMocks(8);
 
-var getRandomNumber = function (min, max) {
+function getRandomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+}
 
-var generateMocks = function (mocksNumber) {
+function generateMocks(mocksNumber) {
   var mocks = [];
   for (var i = 0; i < mocksNumber; i++) {
     var mock = {
@@ -37,26 +38,26 @@ var generateMocks = function (mocksNumber) {
     mocks.push(mock);
   }
   return mocks;
-};
+}
 
-var createPin = function (pin) {
+function createPin(pin) {
   var pinItem = pinTemplate.cloneNode(true);
   var pinImg = pinItem.querySelector('img');
   pinItem.style = 'left: ' + (pin.location.x - (PIN_SIZE_X / 2)) + 'px; top: ' + (pin.location.y - PIN_SIZE_Y) + 'px;';
   pinImg.src = pin.author.avatar;
   pinImg.alt = pin.offer.type;
   return pinItem;
-};
+}
 
-var renderPins = function (pinsNumber) {
+function renderPins(pinsNumber) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < pinsNumber.length; i++) {
     fragment.appendChild(createPin(pinsNumber[i]));
   }
   mapPins.appendChild(fragment);
-};
+}
 
-var enableActiveMode = function () {
+function onMapPinMainClick() {
   for (i = 0; i < adFormElements.length; i++) {
     adFormElements[i].removeAttribute('disabled');
   }
@@ -66,7 +67,7 @@ var enableActiveMode = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   renderPins(marketOffers);
-};
+}
 
 for (var i = 0; i < adFormElements.length; i++) {
   adFormElements[i].setAttribute('disabled', 'disabled');
@@ -76,6 +77,5 @@ for (i = 0; i < filterFormElements.length; i++) {
   filterFormElements[i].setAttribute('disabled', 'disabled');
 }
 
-var marketOffers = generateMocks(8);
-mapPinMain.addEventListener('click', enableActiveMode);
+mapPinMain.addEventListener('click', onMapPinMainClick);
 addressField.value = parseInt(mapPinMain.style.left, 10) + ', ' + parseInt(mapPinMain.style.top, 10);
