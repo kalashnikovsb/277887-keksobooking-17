@@ -10,17 +10,17 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 var mapPinMain = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormElements = document.querySelectorAll('.ad-form__element, .ad-form-header');
-var filterFormElements = document.querySelectorAll('.map__filters > *');
+var filterFormElements = document.querySelectorAll('.map__filter, .map__features');
 var addressField = document.querySelector('input#address');
-var marketOffers = generateMocks(8);
+var marketOffers;
 
-function getRandomNumber(min, max) {
+var getRandomNumber = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-function generateMocks(mocksNumber) {
+var generateMocks = function (mocksNumber) {
   var mocks = [];
   for (var i = 0; i < mocksNumber; i++) {
     var mock = {
@@ -38,26 +38,26 @@ function generateMocks(mocksNumber) {
     mocks.push(mock);
   }
   return mocks;
-}
+};
 
-function createPin(pin) {
+var createPin = function (pin) {
   var pinItem = pinTemplate.cloneNode(true);
   var pinImg = pinItem.querySelector('img');
   pinItem.style = 'left: ' + (pin.location.x - (PIN_SIZE_X / 2)) + 'px; top: ' + (pin.location.y - PIN_SIZE_Y) + 'px;';
   pinImg.src = pin.author.avatar;
   pinImg.alt = pin.offer.type;
   return pinItem;
-}
+};
 
-function renderPins(pinsNumber) {
+var renderPins = function (pinsNumber) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < pinsNumber.length; i++) {
     fragment.appendChild(createPin(pinsNumber[i]));
   }
   mapPins.appendChild(fragment);
-}
+};
 
-function onMapPinMainClick() {
+var onMapPinMainClick = function () {
   for (i = 0; i < adFormElements.length; i++) {
     adFormElements[i].removeAttribute('disabled');
   }
@@ -67,7 +67,7 @@ function onMapPinMainClick() {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   renderPins(marketOffers);
-}
+};
 
 for (var i = 0; i < adFormElements.length; i++) {
   adFormElements[i].setAttribute('disabled', 'disabled');
@@ -77,5 +77,6 @@ for (i = 0; i < filterFormElements.length; i++) {
   filterFormElements[i].setAttribute('disabled', 'disabled');
 }
 
+marketOffers = generateMocks(8);
 mapPinMain.addEventListener('click', onMapPinMainClick);
 addressField.value = parseInt(mapPinMain.style.left, 10) + ', ' + parseInt(mapPinMain.style.top, 10);
