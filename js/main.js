@@ -121,19 +121,23 @@ var movePin = function () {
 
 // Зависимость цены за ночь от типа жилья
 housingTypeSelect.addEventListener('change', function (evt) {
-  var option = evt.target.value;
-  if (option === 'bungalo') {
-    pricePerNightInput.placeholder = '0';
-    pricePerNightInput.min = '0';
-  } else if (option === 'flat') {
-    pricePerNightInput.placeholder = '1000';
-    pricePerNightInput.min = '1000';
-  } else if (option === 'house') {
-    pricePerNightInput.placeholder = '5000';
-    pricePerNightInput.min = '5000';
-  } else if (option === 'palace') {
-    pricePerNightInput.placeholder = '10000';
-    pricePerNightInput.min = '10000';
+  switch (evt.target.value) {
+    case 'bungalo':
+      pricePerNightInput.placeholder = '0';
+      pricePerNightInput.min = '0';
+      break;
+    case 'flat':
+      pricePerNightInput.placeholder = '1000';
+      pricePerNightInput.min = '1000';
+      break;
+    case 'house':
+      pricePerNightInput.placeholder = '5000';
+      pricePerNightInput.min = '5000';
+      break;
+    case 'palace':
+      pricePerNightInput.placeholder = '10000';
+      pricePerNightInput.min = '10000';
+      break;
   }
 });
 
