@@ -7,6 +7,10 @@ var MAIN_PIN_INACTIVE_SIZE_Y = 62;
 var MAIN_PIN_ACTIVE_SIZE_X = 62;
 var MAIN_PIN_ACTIVE_SIZE_Y = 80;
 var HOUSING_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var MIN_COORDS_X = 0;
+var MAX_COORDS_X = 1200;
+var MIN_COORDS_Y = 130;
+var MAX_COORDS_Y = 630;
 
 var map = document.querySelector('.map');
 var mapPins = document.querySelector('.map__pins');
@@ -65,7 +69,7 @@ var renderPins = function (pinsNumber) {
   mapPins.appendChild(fragment);
 };
 
-var onMapMainPinClick = function () {
+var enableActiveMode = function () {
   for (var i = 0; i < adFormElements.length; i++) {
     adFormElements[i].removeAttribute('disabled');
   }
@@ -77,49 +81,67 @@ var onMapMainPinClick = function () {
   renderPins(marketOffers);
 };
 
-// Функция перемещения первоначальной метки по карте
-var movePin = function () {
-  mapMainPin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-    var dragged = false;
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      dragged = true;
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-      mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
-      mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
-      // Координаты в поле адрес при активном режиме, метка с острием, координаты соответствуют острию метки
-      addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
-    };
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      if (dragged) {
-        var onClickPreventDefault = function (clickEvt) {
-          clickEvt.preventDefault();
-          mapMainPin.removeEventListener('click', onClickPreventDefault);
-        };
-        mapMainPin.addEventListener('click', onClickPreventDefault);
-      }
-    };
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-};
+// Перетаскивание метки
+mapMainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var dragged = false;
 
-// Зависимость цены за ночь от типа жилья
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
+    mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
+    addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
+
+    (function () {
+      var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+      var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+      var minPinY = MIN_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
+      var maxPinY = MAX_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
+      if (parseInt(mapMainPin.style.left, 10) < minPinX) {
+        mapMainPin.style.left = minPinX + 'px';
+      }
+      if (parseInt(mapMainPin.style.left, 10) > maxPinX) {
+        mapMainPin.style.left = maxPinX + 'px';
+      }
+      if (parseInt(mapMainPin.style.top, 10) < minPinY) {
+        mapMainPin.style.top = minPinY + 'px';
+      }
+      if (parseInt(mapMainPin.style.top, 10) > maxPinY) {
+        mapMainPin.style.top = maxPinY + 'px';
+      }
+    })();
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    if (dragged) {
+      var onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        mapMainPin.removeEventListener('click', onClickPreventDefault);
+      };
+      mapMainPin.addEventListener('click', onClickPreventDefault);
+      enableActiveMode();
+    }
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
 housingTypeSelect.addEventListener('change', function (evt) {
   switch (evt.target.value) {
     case 'bungalo':
@@ -141,7 +163,6 @@ housingTypeSelect.addEventListener('change', function (evt) {
   }
 });
 
-// Синхронизация времени заезда и выезда
 timeInSelect.addEventListener('change', function (evt) {
   var selectedOption = evt.target.value;
   for (i = 0; i < 3; i++) {
@@ -159,7 +180,6 @@ timeOutSelect.addEventListener('change', function (evt) {
   }
 });
 
-// Скрываю элементы форм в неактивном режиме
 for (var i = 0; i < adFormElements.length; i++) {
   adFormElements[i].setAttribute('disabled', 'disabled');
 }
@@ -167,10 +187,5 @@ for (i = 0; i < filterFormElements.length; i++) {
   filterFormElements[i].setAttribute('disabled', 'disabled');
 }
 
-// Координаты в поле адрес при неактивном режиме, метка круглая, координаты соответствуют центру метки
-addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
-
-// Код приложения
-movePin();
 marketOffers = generateMocks(8);
-mapMainPin.addEventListener('click', onMapMainPinClick);
+addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
