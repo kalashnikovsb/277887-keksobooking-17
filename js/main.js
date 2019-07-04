@@ -81,68 +81,66 @@ var enableActiveMode = function () {
   renderPins(marketOffers);
 };
 
-var movePin = function () {
-  mapMainPin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-    var dragged = false;
+// Перетаскивание метки
+mapMainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var dragged = false;
 
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      dragged = true;
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-      mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
-      mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
-      addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
-      // Ограничение Drag n Drop
-      (function () {
-        var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
-        var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
-        var minPinY = MIN_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
-        var maxPinY = MAX_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
-        if (parseInt(mapMainPin.style.left, 10) < minPinX) {
-          mapMainPin.style.left = minPinX + 'px';
-        }
-        if (parseInt(mapMainPin.style.left, 10) > maxPinX) {
-          mapMainPin.style.left = maxPinX + 'px';
-        }
-        if (parseInt(mapMainPin.style.top, 10) < minPinY) {
-          mapMainPin.style.top = minPinY + 'px';
-        }
-        if (parseInt(mapMainPin.style.top, 10) > maxPinY) {
-          mapMainPin.style.top = maxPinY + 'px';
-        }
-      })();
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
     };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    mapMainPin.style.top = (mapMainPin.offsetTop - shift.y) + 'px';
+    mapMainPin.style.left = (mapMainPin.offsetLeft - shift.x) + 'px';
+    addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
 
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      if (dragged) {
-        var onClickPreventDefault = function (clickEvt) {
-          clickEvt.preventDefault();
-          mapMainPin.removeEventListener('click', onClickPreventDefault);
-        };
-        mapMainPin.addEventListener('click', onClickPreventDefault);
-        enableActiveMode();
+    (function () {
+      var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+      var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+      var minPinY = MIN_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
+      var maxPinY = MAX_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
+      if (parseInt(mapMainPin.style.left, 10) < minPinX) {
+        mapMainPin.style.left = minPinX + 'px';
       }
-    };
+      if (parseInt(mapMainPin.style.left, 10) > maxPinX) {
+        mapMainPin.style.left = maxPinX + 'px';
+      }
+      if (parseInt(mapMainPin.style.top, 10) < minPinY) {
+        mapMainPin.style.top = minPinY + 'px';
+      }
+      if (parseInt(mapMainPin.style.top, 10) > maxPinY) {
+        mapMainPin.style.top = maxPinY + 'px';
+      }
+    })();
+  };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-};
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    if (dragged) {
+      var onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        mapMainPin.removeEventListener('click', onClickPreventDefault);
+      };
+      mapMainPin.addEventListener('click', onClickPreventDefault);
+      enableActiveMode();
+    }
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
 housingTypeSelect.addEventListener('change', function (evt) {
   switch (evt.target.value) {
@@ -189,6 +187,5 @@ for (i = 0; i < filterFormElements.length; i++) {
   filterFormElements[i].setAttribute('disabled', 'disabled');
 }
 
-movePin();
 marketOffers = generateMocks(8);
 addressField.value = (parseInt(mapMainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(mapMainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
