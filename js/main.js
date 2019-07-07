@@ -1,20 +1,32 @@
 'use strict';
-var MAIN_PIN_INACTIVE_SIZE_X = 62;
-var MAIN_PIN_INACTIVE_SIZE_Y = 62;
+var adFormElements = document.querySelectorAll('.ad-form__element, .ad-form-header');
+var filterFormElements = document.querySelectorAll('.map__filter, .map__features');
+var map = document.querySelector('.map');
+var adForm = document.querySelector('.ad-form');
 
-window.mapMainPin = document.querySelector('.map__pin--main');
-window.addressField = document.querySelector('input#address');
-window.adFormElements = document.querySelectorAll('.ad-form__element, .ad-form-header');
-window.filterFormElements = document.querySelectorAll('.map__filter, .map__features');
+window.main = {
+  disableActiveMode: function () {
+    for (var i = 0; i < adFormElements.length; i++) {
+      adFormElements[i].setAttribute('disabled', 'disabled');
+    }
 
-// Недоступность элементов в неактивном режиме
-for (var i = 0; i < window.adFormElements.length; i++) {
-  window.adFormElements[i].setAttribute('disabled', 'disabled');
-}
-for (i = 0; i < window.filterFormElements.length; i++) {
-  window.filterFormElements[i].setAttribute('disabled', 'disabled');
-}
+    for (i = 0; i < filterFormElements.length; i++) {
+      filterFormElements[i].setAttribute('disabled', 'disabled');
+    }
+  },
+
+  enableActiveMode: function () {
+    for (var i = 0; i < adFormElements.length; i++) {
+      adFormElements[i].removeAttribute('disabled');
+    }
+    for (i = 0; i < filterFormElements.length; i++) {
+      filterFormElements[i].removeAttribute('disabled');
+    }
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    window.generatePins.renderPins(window.marketOffers);
+  }
+};
 
 // Код приложения
-window.marketOffers = window.utilities.generateMocks(8);
-window.addressField.value = (parseInt(window.mapMainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(window.mapMainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
+window.main.disableActiveMode();

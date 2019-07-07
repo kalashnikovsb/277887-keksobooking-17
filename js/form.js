@@ -1,9 +1,14 @@
 'use strict';
 (function () {
+  var MAIN_PIN_INACTIVE_SIZE_X = 62;
+  var MAIN_PIN_INACTIVE_SIZE_Y = 62;
+
   var housingTypeSelect = document.querySelector('#type');
   var pricePerNightInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
+  var addressField = document.querySelector('input#address');
+  var mainPin = document.querySelector('.map__pin--main');
 
   housingTypeSelect.addEventListener('change', function (evt) {
     switch (evt.target.value) {
@@ -42,4 +47,7 @@
       }
     }
   });
+
+  // Координаты соответстуют середине основного пина
+  addressField.value = (parseInt(mainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(mainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
 })();

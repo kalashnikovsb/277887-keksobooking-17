@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var HOUSING_TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var PIN_SIZE_X = 50;
   var PIN_SIZE_Y = 70;
 
@@ -24,4 +25,26 @@
       mapPins.appendChild(fragment);
     }
   };
+
+  var generateMocks = function (mocksNumber) {
+    var mocks = [];
+    for (var i = 0; i < mocksNumber; i++) {
+      var mock = {
+        author: {
+          avatar: 'img/avatars/user0' + (i + 1) + '.png',
+        },
+        offer: {
+          type: HOUSING_TYPES[window.utils.getRandomNumber(0, HOUSING_TYPES.length - 1)],
+        },
+        location: {
+          x: window.utils.getRandomNumber(0, 1200),
+          y: window.utils.getRandomNumber(130, 630),
+        }
+      };
+      mocks.push(mock);
+    }
+    return mocks;
+  };
+
+  window.marketOffers = generateMocks(8);
 })();
