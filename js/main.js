@@ -5,14 +5,22 @@ var map = document.querySelector('.map');
 var adForm = document.querySelector('.ad-form');
 
 window.main = {
+  // По умолчанию страница в неактивном режиме
+  isActive: false,
+
   disableActiveMode: function () {
     for (var i = 0; i < adFormElements.length; i++) {
       adFormElements[i].setAttribute('disabled', 'disabled');
     }
-
     for (i = 0; i < filterFormElements.length; i++) {
       filterFormElements[i].setAttribute('disabled', 'disabled');
     }
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    adForm.reset();
+    window.mainPinRestoreCoords();
+    window.pins.deletePins();
+    window.main.isActive = false;
   },
 
   enableActiveMode: function () {
@@ -24,7 +32,8 @@ window.main = {
     }
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.generatePins.renderPins(window.marketOffers);
+    window.pins.renderPins(window.marketOffers);
+    window.main.isActive = true;
   }
 };
 
