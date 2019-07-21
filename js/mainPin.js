@@ -81,7 +81,9 @@
           mainPin.removeEventListener('click', onClickPreventDefault);
         };
         mainPin.addEventListener('click', onClickPreventDefault);
-        window.main.enableActiveMode();
+        if (!window.main.isActive) {
+          window.main.enableActiveMode();
+        }
       }
     };
 

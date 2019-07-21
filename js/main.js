@@ -32,7 +32,8 @@ window.main = {
     }
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.pins.renderPins(window.marketOffers);
+    // Загрузка данных с сервера
+    window.backend.load(window.pins.renderPins);
     window.main.isActive = true;
   }
 };

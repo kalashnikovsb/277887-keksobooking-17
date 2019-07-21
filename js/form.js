@@ -4,7 +4,6 @@
   var pricePerNightInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
-  var adForm = document.querySelector('.ad-form');
 
   var mainElement = document.querySelector('main');
   var successMessage = document.querySelector('#success').content.querySelector('.success');
@@ -51,7 +50,7 @@
   });
 
   // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
-  window.successUpload = function () {
+  var successUpload = function () {
     mainElement.appendChild(successMessage);
     window.addEventListener('click', function () {
       mainElement.removeChild(successMessage);
@@ -60,17 +59,11 @@
   };
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
-  window.unsuccessUpload = function () {
+  var unsuccessUpload = function () {
     mainElement.appendChild(errorMessage);
     errorButton.addEventListener('click', function () {
       mainElement.removeChild(successMessage);
     });
   };
-
-  // Отправка данных на сервер
-  adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), window.successUpload, window.unsuccessUpload);
-    evt.preventDefault();
-  });
 
 })();
