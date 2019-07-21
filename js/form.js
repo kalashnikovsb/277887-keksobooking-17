@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var adForm = document.querySelector('.ad-form');
   var housingTypeSelect = document.querySelector('#type');
   var pricePerNightInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
@@ -52,18 +53,28 @@
   // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
   var successUpload = function () {
     mainElement.appendChild(successMessage);
-    window.addEventListener('click', function () {
+    var onMainElementClick = function () {
       mainElement.removeChild(successMessage);
-    });
+      window.removeEventListener('click', onMainElementClick);
+    };
+    window.addEventListener('click', onMainElementClick);
     window.main.disableActiveMode();
   };
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
   var unsuccessUpload = function () {
     mainElement.appendChild(errorMessage);
-    errorButton.addEventListener('click', function () {
-      mainElement.removeChild(successMessage);
-    });
+    var onMainElementClick = function () {
+      mainElement.removeChild(errorMessage);
+      errorButton.removeEventListener('click', onMainElementClick);
+    };
+    errorButton.addEventListener('click', onMainElementClick);
   };
+
+  // Отправляю данные на сервер
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(adForm), successUpload, unsuccessUpload);
+    evt.preventDefault();
+  });
 
 })();

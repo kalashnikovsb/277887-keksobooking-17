@@ -2,7 +2,7 @@
 (function () {
 
   window.backend = {
-    load: function (successFunction) {
+    load: function (onLoad) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       xhr.open('GET', 'https://js.dump.academy/keksobooking/data');
@@ -10,10 +10,25 @@
 
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
-          console.log(xhr.response);
-          successFunction(xhr.response);
+          onLoad(xhr.response);
         } else {
+          // При неудачной загрузке с сервера по ТЗ ничего делать не надо, буду показывать ошибку в консоль
           console.log(xhr.status);
+        }
+      });
+    },
+
+    upload: function (data, onLoad, onError) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
+      xhr.open('POST', 'https://js.dump.academy/keksobooking/data');
+      xhr.send(data);
+
+      xhr.addEventListener('load', function () {
+        if (xhr.status === 200) {
+          onLoad();
+        } else {
+          onError();
         }
       });
     },
