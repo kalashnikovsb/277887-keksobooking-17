@@ -1,14 +1,15 @@
 'use strict';
 (function () {
-  var MAIN_PIN_INACTIVE_SIZE_X = 62;
-  var MAIN_PIN_INACTIVE_SIZE_Y = 62;
-
+  var adForm = document.querySelector('.ad-form');
   var housingTypeSelect = document.querySelector('#type');
   var pricePerNightInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
-  var addressField = document.querySelector('input#address');
-  var mainPin = document.querySelector('.map__pin--main');
+
+  var mainElement = document.querySelector('main');
+  var successMessage = document.querySelector('#success').content.querySelector('.success');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
+  var errorButton = errorMessage.querySelector('.error__button');
 
   housingTypeSelect.addEventListener('change', function (evt) {
     switch (evt.target.value) {
@@ -39,6 +40,7 @@
       }
     }
   });
+
   timeOutSelect.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
     for (var i = 0; i < 3; i++) {
@@ -48,6 +50,31 @@
     }
   });
 
-  // Координаты соответстуют середине основного пина
-  addressField.value = (parseInt(mainPin.style.left, 10) + MAIN_PIN_INACTIVE_SIZE_X / 2) + ', ' + (parseInt(mainPin.style.top, 10) + MAIN_PIN_INACTIVE_SIZE_Y / 2);
+  // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
+  var successUpload = function () {
+    mainElement.appendChild(successMessage);
+    var onMainElementClick = function () {
+      mainElement.removeChild(successMessage);
+      window.removeEventListener('click', onMainElementClick);
+    };
+    window.addEventListener('click', onMainElementClick);
+    window.main.disableActiveMode();
+  };
+
+  // Неуспешная отправка, окно закрывается при нажатии на кнопку
+  var unsuccessUpload = function () {
+    mainElement.appendChild(errorMessage);
+    var onMainElementClick = function () {
+      mainElement.removeChild(errorMessage);
+      errorButton.removeEventListener('click', onMainElementClick);
+    };
+    errorButton.addEventListener('click', onMainElementClick);
+  };
+
+  // Отправляю данные на сервер
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(adForm), successUpload, unsuccessUpload);
+    evt.preventDefault();
+  });
+
 })();
