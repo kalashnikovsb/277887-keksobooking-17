@@ -11,9 +11,6 @@
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
           onLoad(xhr.response);
-        } else {
-          // При неудачной загрузке с сервера по ТЗ ничего делать не надо, буду показывать ошибку в консоль
-          console.log(xhr.status);
         }
       });
     },
@@ -21,7 +18,7 @@
     upload: function (data, onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
-      xhr.open('POST', 'https://js.dump.academy/keksobooking/data');
+      xhr.open('POST', 'https://js.dump.academy/keksobooking');
       xhr.send(data);
 
       xhr.addEventListener('load', function () {
