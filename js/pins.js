@@ -7,7 +7,7 @@
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   window.pins = {
-    // Данные которые будут загружены, изначально их нет
+    // Данные которые будут загружены
     loadedData: [],
 
     generatePin: function (pin) {
@@ -39,5 +39,13 @@
       }
     },
   };
+
+  // Изначально при удачной загрузке фильтрованные данные равны всем загруженным данным
+  var successLoad = function (data) {
+    window.pins.loadedData = data;
+    window.filteredPins = window.pins.loadedData;
+  };
+
+  window.backend.load(successLoad);
 
 })();
