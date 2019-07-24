@@ -14,6 +14,7 @@
 
   // В функции successLoad в pins.js присвоено window.pins.loadedData
   window.filteredPins;
+  window.summaryPins = [];
 
   // Сортировка по типу жилья
   typeFilter.addEventListener('change', function (evt) {
