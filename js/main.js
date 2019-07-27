@@ -38,17 +38,11 @@ window.main = {
     }
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    // Загрузка данных с сервера
-    window.backend.load(successLoad);
+
     // Отображение начальных меток без фильтра
     window.pins.renderPins(window.pins.loadedData);
     window.main.isActive = true;
   }
-};
-
-// Скопировал загруженные данные
-var successLoad = function (data) {
-  window.pins.loadedData = data;
 };
 
 // Код приложения

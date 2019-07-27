@@ -43,7 +43,6 @@
   // Изначально при удачной загрузке фильтрованные данные равны всем загруженным данным
   var successLoad = function (data) {
     window.pins.loadedData = data;
-    window.filteredPins = window.pins.loadedData;
   };
 
   window.backend.load(successLoad);
