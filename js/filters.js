@@ -1,11 +1,31 @@
 'use strict';
 (function () {
 
+  var filterForm = document.querySelector('.map__filters');
   var typeFilter = document.querySelector('#housing-type');
   var priceFilter = document.querySelector('#housing-price');
   var roomsFilter = document.querySelector('#housing-rooms');
   var guestsFilter = document.querySelector('#housing-guests');
   var featuresFilter = document.querySelectorAll('#housing-features input');
+
+  // Экспорт
+  window.filters = {
+
+    resetFilters: function () {
+      filterForm.reset();
+      featuresFilter = Array.from(featuresFilter);
+      featuresFilter.forEach(function (currentItem) {
+        currentItem.removeAttribute('checked');
+      });
+      currentFilter = {
+        housingType: 'any',
+        housingPrice: 'any',
+        housingRooms: 'any',
+        housingGuests: 'any',
+      };
+    },
+
+  };
 
   // Функции фильтрации:
   var filterType = function (currentItem, type) {
@@ -95,7 +115,7 @@
 
   // Функция фильтрации для всех фильтров
   var getFilteredPins = function () {
-    var tempPins = window.filteredPins.filter(function (currentItem) {
+    var tempPins = window.pins.loadedData.filter(function (currentItem) {
       for (var key in currentFilter) {
         if (!filters[key](currentItem, currentFilter[key])) {
           return false;

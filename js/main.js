@@ -17,7 +17,13 @@ window.main = {
     }
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
+
+    // Сбрасываю форму объявления
     adForm.reset();
+
+    // Сбрасываю форму фильтроа
+    window.filters.resetFilters();
+
     window.mainPinRestoreCoords();
     window.pins.deletePins();
     window.main.isActive = false;
@@ -35,7 +41,7 @@ window.main = {
     // Загрузка данных с сервера
     window.backend.load(successLoad);
     // Отображение начальных меток без фильтра
-    window.pins.renderPins(window.filteredPins);
+    window.pins.renderPins(window.pins.loadedData);
     window.main.isActive = true;
   }
 };
@@ -43,7 +49,6 @@ window.main = {
 // Скопировал загруженные данные
 var successLoad = function (data) {
   window.pins.loadedData = data;
-  window.filteredPins = window.pins.loadedData.slice();
 };
 
 // Код приложения
