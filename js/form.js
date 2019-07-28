@@ -5,8 +5,8 @@
   var pricePerNightInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
-//  var roomsSelect = document.querySelector('#room_number');
-//  var guestsSelect = document.querySelector('#capacity');
+  var roomsSelect = document.querySelector('#room_number');
+  var guestsSelect = document.querySelector('#capacity');
   var adFormReset = document.querySelector('.ad-form__reset');
   var mainElement = document.querySelector('main');
   var successMessage = document.querySelector('#success').content.querySelector('.success');
@@ -34,12 +34,80 @@
     }
   });
 
-//  roomsSelect.addEventListener('change', function (evt) {
-//    for (var i = 0; i < 4; i++) {
-//      guestsSelect.options[i].removeAttribute('disabled');
-//    }
-//  });
+  // Синхронизация комнат с гостями
+  roomsSelect.addEventListener('change', function (evt) {
 
+    // Убираю все disabled при изменении элемента формы
+    Array.from(guestsSelect.options).forEach(function (option) {
+      option.removeAttribute('disabled');
+    });
+
+    // Остальные комнаты
+    Array.from(guestsSelect.options).forEach(function (option) {
+      if (evt.target.value < option.value) {
+        option.setAttribute('disabled', '');
+      }
+      if (option.value === evt.target.value) {
+        guestsSelect.querySelector('[selected = \'\' ]').removeAttribute('selected');
+        option.setAttribute('selected', '');
+      }
+      if (option.value === '0') {
+        option.removeAttribute('selected');
+        option.setAttribute('disabled', '');
+      }
+    });
+
+    // 100 комнат
+    if (evt.target.value === '100') {
+      Array.from(guestsSelect.options).forEach(function (option) {
+        if (option.value !== '0') {
+          option.setAttribute('disabled', '');
+          option.removeAttribute('selected');
+        } else {
+          option.removeAttribute('disabled');
+          option.setAttribute('selected', '');
+        }
+      });
+    }
+
+  });
+
+  // Синхронизация гостей с комнатами
+  guestsSelect.addEventListener('change', function (evt) {
+
+    Array.from(roomsSelect.options).forEach(function (option) {
+      option.removeAttribute('disabled');
+    });
+
+    Array.from(roomsSelect.options).forEach(function (option) {
+      if (evt.target.value > option.value) {
+        option.setAttribute('disabled', '');
+      }
+      if (option.value === evt.target.value) {
+        roomsSelect.querySelector('[selected = \'\' ]').removeAttribute('selected');
+        option.setAttribute('selected', '');
+      }
+      if (option.value === '100') {
+        option.removeAttribute('selected');
+        option.setAttribute('disabled', '');
+      }
+    });
+
+    if (evt.target.value === '0') {
+      Array.from(roomsSelect.options).forEach(function (option) {
+        if (option.value !== '100') {
+          option.setAttribute('disabled', '');
+          option.removeAttribute('selected');
+        } else {
+          option.removeAttribute('disabled');
+          option.setAttribute('selected', '');
+        }
+      });
+    }
+
+  });
+
+  // Синхронизация времени заезда с выездом
   timeInSelect.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
     for (var i = 0; i < 3; i++) {
@@ -49,6 +117,7 @@
     }
   });
 
+  // Синхронизация времени выезда с заездом
   timeOutSelect.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
     for (var i = 0; i < 3; i++) {
@@ -59,7 +128,7 @@
   });
 
   // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
-  window.successUpload = function () {
+  var successUpload = function () {
     mainElement.appendChild(successMessage);
 
     var onMainElementClick = function () {
@@ -88,7 +157,7 @@
   });
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
-  window.unsuccessUpload = function () {
+  var unsuccessUpload = function () {
     mainElement.appendChild(errorMessage);
 
     var onMainElementClick = function () {
@@ -121,7 +190,7 @@
 
   // Отправляю данные на сервер
   adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), window.successUpload, window.unsuccessUpload);
+    window.backend.upload(new FormData(adForm), successUpload, unsuccessUpload);
     evt.preventDefault();
   });
 

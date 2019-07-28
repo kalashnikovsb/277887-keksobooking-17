@@ -40,7 +40,7 @@ window.main = {
     adForm.classList.remove('ad-form--disabled');
 
     // Отображение начальных меток без фильтра
-    window.pins.renderPins(window.pins.loadedData);
+    window.pins.renderPins(window.pins.loadedData.slice(0, 5));
     window.main.isActive = true;
   }
 };
