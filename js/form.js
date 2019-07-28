@@ -74,7 +74,6 @@
 
   // Синхронизация гостей с комнатами
   guestsSelect.addEventListener('change', function (evt) {
-
     Array.from(roomsSelect.options).forEach(function (option) {
       option.removeAttribute('disabled');
     });
@@ -104,7 +103,6 @@
         }
       });
     }
-
   });
 
   // Синхронизация времени заезда с выездом

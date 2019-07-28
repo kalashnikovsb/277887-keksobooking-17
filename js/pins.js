@@ -16,6 +16,10 @@
       pinItem.style = 'left: ' + (pin.location.x - PIN_SIZE_X / 2) + 'px; top: ' + (pin.location.y - PIN_SIZE_Y) + 'px;';
       pinImg.src = pin.author.avatar;
       pinImg.alt = pin.offer.type;
+      
+      // Каждой метке создается обработчик нажатия
+      window.card.generateCard(pinItem, pin);
+      
       return pinItem;
     },
 
