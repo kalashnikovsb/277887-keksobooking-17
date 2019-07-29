@@ -9,6 +9,17 @@
     generateCard: function (pinItem, data) {
       pinItem.addEventListener('click', function () {
 
+        // Нахожу активные метки
+        var activePins = document.querySelectorAll('.map__pin--active');
+
+        // Удаляю активные метки если есть
+        Array.from(activePins).forEach(function (pin) {
+          pin.classList.remove('map__pin--active');
+        });
+
+        // Добавляю метку активной
+        pinItem.classList.add('map__pin--active');
+
         // Проверка на существование копий попапа, удаляю если есть
         if (document.querySelector('.map__card') !== null) {
           mapPinsBlock.removeChild(document.querySelector('.map__card'));
@@ -141,11 +152,13 @@
 
         // Обработчики закрытия
         close.addEventListener('click', function () {
+          pinItem.classList.remove('map__pin--active');
           card.remove();
         });
 
         window.addEventListener('keydown', function (evt) {
           if (evt.keyCode === 27) {
+            pinItem.classList.remove('map__pin--active');
             card.remove();
           }
         });

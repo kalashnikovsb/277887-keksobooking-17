@@ -24,6 +24,10 @@
     renderPins: function (pinsArray) {
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < pinsArray.length; i++) {
+        // Если нет поля offer то метка пропускается
+        if (!pinsArray[i].offer) {
+          continue;
+        }
         fragment.appendChild(window.pins.generatePin(pinsArray[i]));
       }
       mapPinsBlock.appendChild(fragment);
@@ -44,7 +48,7 @@
     refreshPins: function (arr) {
       window.pins.deletePins();
       window.pins.renderPins(arr);
-    }
+    },
 
   };
 

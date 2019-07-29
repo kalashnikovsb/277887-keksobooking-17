@@ -7,6 +7,7 @@
   var roomsFilter = document.querySelector('#housing-rooms');
   var guestsFilter = document.querySelector('#housing-guests');
   var featuresFilter = document.querySelectorAll('#housing-features input');
+  var lastTimeout;
 
   // Экспорт
   window.filters = {
@@ -23,6 +24,16 @@
         housingGuests: 'any',
       };
     },
+  };
+
+  // Устранение дребезга
+  var debounce = function (func, data) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      func(data);
+    }, 500);
   };
 
   // Функции фильтрации:
@@ -128,25 +139,25 @@
   typeFilter.addEventListener('change', function (evt) {
     currentFilter.housingType = evt.target.value;
     var tempPins = getFilteredPins();
-    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   priceFilter.addEventListener('change', function (evt) {
     currentFilter.housingPrice = evt.target.value;
     var tempPins = getFilteredPins();
-    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   roomsFilter.addEventListener('change', function (evt) {
     currentFilter.housingRooms = evt.target.value;
     var tempPins = getFilteredPins();
-    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   guestsFilter.addEventListener('change', function (evt) {
     currentFilter.housingGuests = evt.target.value;
     var tempPins = getFilteredPins();
-    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   // Обработчики для фильтрафии по чекбоксам
@@ -165,7 +176,7 @@
       }
 
       var tempPins = getFilteredPins();
-      window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+      debounce(window.pins.refreshPins, tempPins.slice(0, 5));
     });
   }
 
