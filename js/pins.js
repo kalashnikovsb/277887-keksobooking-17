@@ -40,6 +40,12 @@
         }
       }
     },
+
+    refreshPins: function (arr) {
+      window.pins.deletePins();
+      window.pins.renderPins(arr);
+    }
+
   };
 
   // Изначально при удачной загрузке фильтрованные данные равны всем загруженным данным

@@ -10,7 +10,6 @@
 
   // Экспорт
   window.filters = {
-
     resetFilters: function () {
       filterForm.reset();
       featuresFilter = Array.from(featuresFilter);
@@ -24,7 +23,6 @@
         housingGuests: 'any',
       };
     },
-
   };
 
   // Функции фильтрации:
@@ -130,29 +128,25 @@
   typeFilter.addEventListener('change', function (evt) {
     currentFilter.housingType = evt.target.value;
     var tempPins = getFilteredPins();
-    window.pins.deletePins();
-    window.pins.renderPins(tempPins.slice(0, 5));
+    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   priceFilter.addEventListener('change', function (evt) {
     currentFilter.housingPrice = evt.target.value;
     var tempPins = getFilteredPins();
-    window.pins.deletePins();
-    window.pins.renderPins(tempPins.slice(0, 5));
+    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   roomsFilter.addEventListener('change', function (evt) {
     currentFilter.housingRooms = evt.target.value;
     var tempPins = getFilteredPins();
-    window.pins.deletePins();
-    window.pins.renderPins(tempPins.slice(0, 5));
+    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   guestsFilter.addEventListener('change', function (evt) {
     currentFilter.housingGuests = evt.target.value;
     var tempPins = getFilteredPins();
-    window.pins.deletePins();
-    window.pins.renderPins(tempPins.slice(0, 5));
+    window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
   });
 
   // Обработчики для фильтрафии по чекбоксам
@@ -171,8 +165,7 @@
       }
 
       var tempPins = getFilteredPins();
-      window.pins.deletePins();
-      window.pins.renderPins(tempPins.slice(0, 5));
+      window.debounce(window.pins.refreshPins, tempPins.slice(0, 5));
     });
   }
 
