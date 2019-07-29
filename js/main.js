@@ -26,6 +26,7 @@ window.main = {
 
     window.mainPinRestoreCoords();
     window.pins.deletePins();
+    window.card.deleteCard();
     window.main.isActive = false;
   },
 
