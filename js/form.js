@@ -12,6 +12,77 @@
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var errorButton = errorMessage.querySelector('.error__button');
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var avatarChooser = document.querySelector('.ad-form-header__input');
+  var avatarPreviewImage = document.querySelector('.ad-form-header__preview img[alt=\'Аватар пользователя\']');
+  var photoContainer = document.querySelector('.ad-form__photo-container');
+  var photoChooser = document.querySelector('.ad-form__input');
+
+  window.form = {
+
+    resetForm: function () {
+      adForm.reset();
+
+      // Удаляю фото аватара
+      avatarPreviewImage.src = 'img/muffin-grey.svg';
+
+      // Удаляю фото недвижимости
+      var photoPreviews = document.querySelectorAll('.ad-form__photo');
+      if (photoPreviews[0].lastElementChild) {
+        photoPreviews[0].lastElementChild.remove();
+      }
+      for (var i = 1; i < photoPreviews.length; i++) {
+        photoPreviews[i].remove();
+      }
+
+    },
+
+  };
+
+  // Отображение фото аватара
+  avatarChooser.addEventListener('change', function () {
+    var file = avatarChooser.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        avatarPreviewImage.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Отображение фото недвижимости
+  photoChooser.addEventListener('change', function () {
+    var file = photoChooser.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        var imgElement = document.createElement('img');
+        var divElement = document.createElement('div');
+        imgElement.width = 70;
+        imgElement.height = 70;
+        imgElement.alt = 'Изображение недвижимости';
+        imgElement.src = reader.result;
+        photoContainer.lastElementChild.appendChild(imgElement);
+        divElement.classList.add('ad-form__photo');
+        photoContainer.appendChild(divElement);
+      });
+
+      reader.readAsDataURL(file);
+    }
+
+  });
 
   housingTypeSelect.addEventListener('change', function (evt) {
     switch (evt.target.value) {
@@ -151,6 +222,7 @@
   // Кнопка очистить
   adFormReset.addEventListener('click', function (evt) {
     evt.preventDefault();
+    window.form.resetForm();
     window.main.disableActiveMode();
   });
 

@@ -19,7 +19,7 @@ window.main = {
     adForm.classList.add('ad-form--disabled');
 
     // Сбрасываю форму объявления
-    adForm.reset();
+    window.form.resetForm();
 
     // Сбрасываю форму фильтроа
     window.filters.resetFilters();
