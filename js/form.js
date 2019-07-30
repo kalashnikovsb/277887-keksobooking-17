@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var adForm = document.querySelector('.ad-form');
   var housingTypeSelect = document.querySelector('#type');
   var pricePerNightInput = document.querySelector('#price');
@@ -12,7 +14,6 @@
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var errorButton = errorMessage.querySelector('.error__button');
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var avatarChooser = document.querySelector('.ad-form-header__input');
   var avatarPreviewImage = document.querySelector('.ad-form-header__preview img[alt=\'Аватар пользователя\']');
   var photoContainer = document.querySelector('.ad-form__photo-container');
@@ -20,7 +21,7 @@
 
   window.form = {
 
-    resetForm: function () {
+    reset: function () {
       adForm.reset();
 
       // Удаляю фото аватара
@@ -222,7 +223,7 @@
   // Кнопка очистить
   adFormReset.addEventListener('click', function (evt) {
     evt.preventDefault();
-    window.form.resetForm();
+    window.form.reset();
     window.main.disableActiveMode();
   });
 

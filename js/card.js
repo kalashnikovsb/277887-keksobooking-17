@@ -7,7 +7,7 @@
 
   window.card = {
 
-    renderCard: function (pinItem, data) {
+    render: function (pinItem, data) {
 
       // Проверяю лишние копии карточки, удаляю если есть
       if (document.querySelector('.map__card') !== null) {
@@ -25,7 +25,6 @@
 
       // Копирую шаблон и вставляю в блок карты
       var card = cardTemplate.cloneNode(true);
-      mapPinsBlock.appendChild(card);
 
       var avatar = card.querySelector('.popup__avatar');
       var title = card.querySelector('.popup__title');
@@ -160,9 +159,11 @@
         }
       });
 
+      mapPinsBlock.appendChild(card);
+
     },
 
-    deleteCard: function () {
+    delete: function () {
       if (document.querySelector('.map__card') !== null) {
         mapPinsBlock.removeChild(document.querySelector('.map__card'));
       }

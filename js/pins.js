@@ -10,7 +10,7 @@
     // Данные которые будут загружены
     loadedData: [],
 
-    generatePin: function (pin) {
+    generate: function (pin) {
       var pinItem = pinTemplate.cloneNode(true);
       var pinImg = pinItem.querySelector('img');
       pinItem.style = 'left: ' + (pin.location.x - PIN_SIZE_X / 2) + 'px; top: ' + (pin.location.y - PIN_SIZE_Y) + 'px;';
@@ -20,26 +20,26 @@
       // Добавляю обработчик каждой метке
       // При нажатии создается карточка
       pinItem.addEventListener('click', function () {
-        window.card.renderCard(pinItem, pin);
+        window.card.render(pinItem, pin);
       });
 
       return pinItem;
     },
 
-    renderPins: function (pinsArray) {
+    render: function (pinsArray) {
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < pinsArray.length; i++) {
         // Если нет поля offer то метка пропускается
         if (!pinsArray[i].offer) {
           continue;
         }
-        fragment.appendChild(window.pins.generatePin(pinsArray[i]));
+        fragment.appendChild(window.pins.generate(pinsArray[i]));
       }
       mapPinsBlock.appendChild(fragment);
     },
 
     // Удаляет все метки кроме главной. Срабатывает только в активном режиме
-    deletePins: function () {
+    delete: function () {
       var mapPins = document.querySelectorAll('.map__pin');
       if (window.main.isActive) {
         for (var i = 0; i < mapPins.length; i++) {
@@ -50,9 +50,9 @@
       }
     },
 
-    refreshPins: function (arr) {
-      window.pins.deletePins();
-      window.pins.renderPins(arr);
+    refresh: function (arr) {
+      window.pins.delete();
+      window.pins.render(arr);
     },
 
   };

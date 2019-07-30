@@ -12,7 +12,7 @@
 
   // Экспорт
   window.filters = {
-    resetFilters: function () {
+    reset: function () {
       filterForm.reset();
       featuresList = Array.from(featuresList);
       featuresList.forEach(function (currentItem) {
@@ -145,7 +145,7 @@
       var tempPins = getFilteredPins();
 
       // Устраняю дребезг при частом изменении селектов
-      debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+      debounce(window.pins.refresh, tempPins.slice(0, 5));
     });
   };
 
@@ -170,7 +170,7 @@
     var tempPins = getFilteredPins();
 
     // Устраняю дребезг при частом изменении чекбоксов
-    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+    debounce(window.pins.refresh, tempPins.slice(0, 5));
   });
 
 })();

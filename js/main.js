@@ -19,14 +19,14 @@ window.main = {
     adForm.classList.add('ad-form--disabled');
 
     // Сбрасываю форму объявления
-    window.form.resetForm();
+    window.form.reset();
 
     // Сбрасываю форму фильтроа
-    window.filters.resetFilters();
+    window.filters.reset();
 
     window.mainPinRestoreCoords();
-    window.pins.deletePins();
-    window.card.deleteCard();
+    window.pins.delete();
+    window.card.delete();
     window.main.isActive = false;
   },
 
@@ -41,7 +41,7 @@ window.main = {
     adForm.classList.remove('ad-form--disabled');
 
     // Отображение начальных меток без фильтра
-    window.pins.renderPins(window.pins.loadedData.slice(0, 5));
+    window.pins.render(window.pins.loadedData.slice(0, 5));
     window.main.isActive = true;
   }
 };
