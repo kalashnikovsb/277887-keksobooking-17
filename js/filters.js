@@ -6,15 +6,16 @@
   var priceFilter = document.querySelector('#housing-price');
   var roomsFilter = document.querySelector('#housing-rooms');
   var guestsFilter = document.querySelector('#housing-guests');
-  var featuresFilter = document.querySelectorAll('#housing-features input');
+  var featuresFilter = document.querySelector('#housing-features');
+  var featuresList = document.querySelectorAll('#housing-features .map__checkbox');
   var lastTimeout;
 
   // Экспорт
   window.filters = {
     resetFilters: function () {
       filterForm.reset();
-      featuresFilter = Array.from(featuresFilter);
-      featuresFilter.forEach(function (currentItem) {
+      featuresList = Array.from(featuresList);
+      featuresList.forEach(function (currentItem) {
         currentItem.removeAttribute('checked');
       });
       currentFilter = {
@@ -135,49 +136,41 @@
     return tempPins;
   };
 
-  // Обработчики для фильтрации по Селектам
-  typeFilter.addEventListener('change', function (evt) {
-    currentFilter.housingType = evt.target.value;
-    var tempPins = getFilteredPins();
-    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
-  });
-
-  priceFilter.addEventListener('change', function (evt) {
-    currentFilter.housingPrice = evt.target.value;
-    var tempPins = getFilteredPins();
-    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
-  });
-
-  roomsFilter.addEventListener('change', function (evt) {
-    currentFilter.housingRooms = evt.target.value;
-    var tempPins = getFilteredPins();
-    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
-  });
-
-  guestsFilter.addEventListener('change', function (evt) {
-    currentFilter.housingGuests = evt.target.value;
-    var tempPins = getFilteredPins();
-    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
-  });
-
-  // Обработчики для фильтрафии по чекбоксам
-  for (var i = 0; i < featuresFilter.length; i++) {
-    featuresFilter[i].addEventListener('change', function (evt) {
-
-      // Создается ключ типа wifi: 'wifi'
-      currentFilter[evt.target.value] = evt.target.value;
-
-      // Проверка включен или выключен чекбокс
-      if (evt.target.hasAttribute('checked')) {
-        delete currentFilter[evt.target.value];
-        evt.target.removeAttribute('checked');
-      } else if (!evt.target.hasAttribute('checked')) {
-        evt.target.setAttribute('checked', '');
-      }
-
+  // Функция создания обработчика
+  // obj - селект для установки
+  // filter - соответствующий селекту ключ настроек фильтра
+  var setSelectListener = function (obj, filter) {
+    obj.addEventListener('change', function (evt) {
+      currentFilter[filter] = evt.target.value;
       var tempPins = getFilteredPins();
+
+      // Устраняю дребезг при частом изменении селектов
       debounce(window.pins.refreshPins, tempPins.slice(0, 5));
     });
-  }
+  };
+
+  setSelectListener(typeFilter, 'housingType');
+  setSelectListener(priceFilter, 'housingPrice');
+  setSelectListener(roomsFilter, 'housingRooms');
+  setSelectListener(guestsFilter, 'housingGuests');
+
+  // Обработчики для фильтрафии по чекбоксам
+  featuresFilter.addEventListener('change', function (evt) {
+
+    // Создается ключ типа wifi: 'wifi'
+    currentFilter[evt.target.value] = evt.target.value;
+
+    // Проверка включен или выключен чекбокс
+    if (evt.target.hasAttribute('checked')) {
+      delete currentFilter[evt.target.value];
+      evt.target.toggleAttribute('checked');
+    } else {
+      evt.target.toggleAttribute('checked');
+    }
+    var tempPins = getFilteredPins();
+
+    // Устраняю дребезг при частом изменении чекбоксов
+    debounce(window.pins.refreshPins, tempPins.slice(0, 5));
+  });
 
 })();
