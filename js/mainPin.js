@@ -48,9 +48,6 @@
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
 
-      // Координаты соответстуют острому концу основного пина
-      addressField.value = (parseInt(mainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
-
       (function () {
         var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
         var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
@@ -69,6 +66,9 @@
           mainPin.style.top = maxPinY + 'px';
         }
       })();
+
+      // Координаты соответстуют острому концу основного пина
+      addressField.value = (parseInt(mainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
     };
 
     var onMouseUp = function (upEvt) {

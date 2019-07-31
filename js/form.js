@@ -5,17 +5,17 @@
   var adForm = document.querySelector('.ad-form');
   var housingTypeSelect = document.querySelector('#type');
   var pricePerNightInput = document.querySelector('#price');
-  var timeInSelect = document.querySelector('#timein');
-  var timeOutSelect = document.querySelector('#timeout');
-  var roomsSelect = document.querySelector('#room_number');
-  var guestsSelect = document.querySelector('#capacity');
+  var timeIn = document.querySelector('#timein');
+  var timeOut = document.querySelector('#timeout');
+  var rooms = document.querySelector('#room_number');
+  var guests = document.querySelector('#capacity');
   var adFormReset = document.querySelector('.ad-form__reset');
   var mainElement = document.querySelector('main');
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var errorButton = errorMessage.querySelector('.error__button');
   var avatarChooser = document.querySelector('.ad-form-header__input');
-  var avatarPreviewImage = document.querySelector('.ad-form-header__preview img[alt=\'Аватар пользователя\']');
+  var avatarPreview = document.querySelector('.ad-form-header__preview img[alt=\'Аватар пользователя\']');
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoChooser = document.querySelector('.ad-form__input');
 
@@ -25,7 +25,7 @@
       adForm.reset();
 
       // Удаляю фото аватара
-      avatarPreviewImage.src = 'img/muffin-grey.svg';
+      avatarPreview.src = 'img/muffin-grey.svg';
 
       // Удаляю фото недвижимости
       var photoPreviews = document.querySelectorAll('.ad-form__photo');
@@ -107,20 +107,20 @@
   });
 
   // Синхронизация комнат с гостями
-  roomsSelect.addEventListener('change', function (evt) {
+  rooms.addEventListener('change', function (evt) {
 
     // Убираю все disabled при изменении элемента формы
-    Array.from(guestsSelect.options).forEach(function (option) {
+    Array.from(guests.options).forEach(function (option) {
       option.removeAttribute('disabled');
     });
 
     // Остальные комнаты
-    Array.from(guestsSelect.options).forEach(function (option) {
+    Array.from(guests.options).forEach(function (option) {
       if (evt.target.value < option.value) {
         option.setAttribute('disabled', '');
       }
       if (option.value === evt.target.value) {
-        guestsSelect.querySelector('[selected = \'\' ]').removeAttribute('selected');
+        guests.querySelector('[selected = \'\' ]').removeAttribute('selected');
         option.setAttribute('selected', '');
       }
       if (option.value === '0') {
@@ -131,7 +131,7 @@
 
     // 100 комнат
     if (evt.target.value === '100') {
-      Array.from(guestsSelect.options).forEach(function (option) {
+      Array.from(guests.options).forEach(function (option) {
         if (option.value !== '0') {
           option.setAttribute('disabled', '');
           option.removeAttribute('selected');
@@ -145,17 +145,17 @@
   });
 
   // Синхронизация гостей с комнатами
-  guestsSelect.addEventListener('change', function (evt) {
-    Array.from(roomsSelect.options).forEach(function (option) {
+  guests.addEventListener('change', function (evt) {
+    Array.from(rooms.options).forEach(function (option) {
       option.removeAttribute('disabled');
     });
 
-    Array.from(roomsSelect.options).forEach(function (option) {
+    Array.from(rooms.options).forEach(function (option) {
       if (evt.target.value > option.value) {
         option.setAttribute('disabled', '');
       }
       if (option.value === evt.target.value) {
-        roomsSelect.querySelector('[selected = \'\' ]').removeAttribute('selected');
+        rooms.querySelector('[selected = \'\' ]').removeAttribute('selected');
         option.setAttribute('selected', '');
       }
       if (option.value === '100') {
@@ -165,7 +165,7 @@
     });
 
     if (evt.target.value === '0') {
-      Array.from(roomsSelect.options).forEach(function (option) {
+      Array.from(rooms.options).forEach(function (option) {
         if (option.value !== '100') {
           option.setAttribute('disabled', '');
           option.removeAttribute('selected');
@@ -178,21 +178,21 @@
   });
 
   // Синхронизация времени заезда с выездом
-  timeInSelect.addEventListener('change', function (evt) {
+  timeIn.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
-    for (var i = 0; i < 3; i++) {
-      if (timeOutSelect.options[i].value === selectedOption) {
-        timeOutSelect.options[i].selected = 'true';
+    for (var i = 0; i < timeIn.children.length; i++) {
+      if (timeOut.options[i].value === selectedOption) {
+        timeOut.options[i].selected = 'true';
       }
     }
   });
 
   // Синхронизация времени выезда с заездом
-  timeOutSelect.addEventListener('change', function (evt) {
+  timeOut.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
-    for (var i = 0; i < 3; i++) {
-      if (timeInSelect.options[i].value === selectedOption) {
-        timeInSelect.options[i].selected = 'true';
+    for (var i = 0; i < timeOut.children.length; i++) {
+      if (timeIn.options[i].value === selectedOption) {
+        timeIn.options[i].selected = 'true';
       }
     }
   });
