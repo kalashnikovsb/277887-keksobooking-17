@@ -14,15 +14,6 @@
         mapPinsBlock.removeChild(document.querySelector('.map__card'));
       }
 
-      // Нахожу и удаляю активные метки если они есть
-      var activePins = document.querySelectorAll('.map__pin--active');
-      Array.from(activePins).forEach(function (pin) {
-        pin.classList.remove('map__pin--active');
-      });
-
-      // Делаю текущую метку активной
-      pinItem.classList.add('map__pin--active');
-
       // Копирую шаблон и вставляю в блок карты
       var card = cardTemplate.cloneNode(true);
 
@@ -42,35 +33,35 @@
 
       // Проверка существования аватара и установка
       if (!data.author.avatar) {
-        avatar.remove();
+        avatar.style.display = 'none';
       } else {
         avatar.src = data.author.avatar;
       }
 
       // Проверка существования названия и установка
       if (!data.offer.title) {
-        title.remove();
+        title.style.display = 'none';
       } else {
         title.innerText = data.offer.title;
       }
 
       // Проверка существования адреса и установка
       if (!data.offer.address) {
-        address.remove();
+        address.style.display = 'none';
       } else {
         address.innerText = data.offer.address;
       }
 
       // Проверка существования цены и установка
       if (!data.offer.price) {
-        price.remove();
+        price.style.display = 'none';
       } else {
         price.innerText = data.offer.price + '₽/ночь';
       }
 
       // Проверка существования типа и установка
       if (!data.offer.type) {
-        type.remove();
+        type.style.display = 'none';
       } else {
         switch (data.offer.type) {
           case 'palace':
@@ -90,7 +81,7 @@
 
       // Проверка существования гостей и комнат
       if (!data.offer.rooms && !data.offer.guests) {
-        capacity.remove();
+        capacity.style.display = 'none';
       } else if (!data.offer.rooms) {
         capacity.innerText = 'Количество гостей: ' + data.offer.guests;
       } else if (!data.offer.guests) {
@@ -101,7 +92,7 @@
 
       // Проверка существования времени
       if (!data.offer.checkin && !data.offer.checkout) {
-        time.remove();
+        time.style.display = 'none';
       } else if (!data.offer.checkin) {
         time.innerText = 'Выезд до ' + data.offer.checkout;
       } else if (!data.offer.checkout) {
@@ -112,28 +103,28 @@
 
       // Проверка существования удобств
       if (data.offer.features.length === 0) {
-        featuresBlock.remove();
+        featuresBlock.style.display = 'none';
       } else {
         // Удаление иконок для которых удобств нет
         for (var i = 0; i < featuresList.length; i++) {
           var featureIndex = featuresList[i].classList[1].lastIndexOf('-') + 1;
           var featureString = featuresList[i].classList[1].slice(featureIndex);
           if (data.offer.features.indexOf(featureString) === -1) {
-            featuresList[i].remove();
+            featuresList[i].style.display = 'none';
           }
         }
       }
 
       // Проверка существования описания
       if (!data.offer.description) {
-        description.remove();
+        description.style.display = 'none';
       } else {
         description.innerText = data.offer.description;
       }
 
       // Проверка существования фотографий
       if (data.offer.photos.length === 0) {
-        photosBlock.remove();
+        photosBlock.style.display = 'none';
       } else {
         // Клонировать на 1 меньше. В разметке уже есть 1
         for (i = 0; i < data.offer.photos.length - 1; i++) {
@@ -149,13 +140,13 @@
       // Обработчики закрытия
       close.addEventListener('click', function () {
         pinItem.classList.remove('map__pin--active');
-        card.remove();
+        card.style.display = 'none';
       });
 
       window.addEventListener('keydown', function (evt) {
         if (evt.keyCode === 27) {
           pinItem.classList.remove('map__pin--active');
-          card.remove();
+          card.style.display = 'none';
         }
       });
 

@@ -16,6 +16,7 @@
   var errorButton = errorMessage.querySelector('.error__button');
   var avatarChooser = document.querySelector('.ad-form-header__input');
   var avatarPreview = document.querySelector('.ad-form-header__preview img[alt=\'Аватар пользователя\']');
+  var avatarDefaultSrc = 'img/muffin-grey.svg';
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoChooser = document.querySelector('.ad-form__input');
 
@@ -25,7 +26,7 @@
       adForm.reset();
 
       // Удаляю фото аватара
-      avatarPreview.src = 'img/muffin-grey.svg';
+      avatarPreview.src = avatarDefaultSrc;
 
       // Удаляю фото недвижимости
       var photoPreviews = document.querySelectorAll('.ad-form__photo');
@@ -51,7 +52,7 @@
     if (matches) {
       var reader = new FileReader();
       reader.addEventListener('load', function () {
-        avatarPreviewImage.src = reader.result;
+        avatarPreview.src = reader.result;
       });
 
       reader.readAsDataURL(file);

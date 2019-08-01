@@ -21,6 +21,15 @@
       // При нажатии создается карточка
       pinItem.addEventListener('click', function () {
         window.card.render(pinItem, pin);
+
+        // Нахожу и удаляю активные метки если они есть
+        var activePins = document.querySelectorAll('.map__pin--active');
+        Array.from(activePins).forEach(function (item) {
+          item.classList.remove('map__pin--active');
+        });
+
+        // Делаю текущую метку активной
+        pinItem.classList.add('map__pin--active');
       });
 
       return pinItem;
