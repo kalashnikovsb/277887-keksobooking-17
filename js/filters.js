@@ -17,6 +17,12 @@
         price: 'any',
         rooms: 'any',
         guests: 'any',
+        wifi: false,
+        dishwasher: false,
+        parking: false,
+        washer: false,
+        elevator: false,
+        conditioner: false,
       };
     },
   };
@@ -78,11 +84,11 @@
     }
   };
 
-  var filterFeature = function (currentItem, feature) {
-    if (currentItem.offer.features.indexOf(feature) !== -1) {
-      return true;
+  var filterFeature = function (currentItem, isNecessary, feature) {
+    if (isNecessary) {
+      return currentItem.offer.features.indexOf(feature) !== -1;
     }
-    return false;
+    return true;
   };
 
   // Текущие настройки фильтра. Фильтры по чекбоксам появляются при нажатии
@@ -91,6 +97,12 @@
     price: 'any',
     rooms: 'any',
     guests: 'any',
+    wifi: false,
+    dishwasher: false,
+    parking: false,
+    washer: false,
+    elevator: false,
+    conditioner: false,
   };
 
   // Список функций для фильтрации
@@ -111,7 +123,7 @@
   var getFilteredPins = function () {
     var tempPins = window.pins.loadedData.filter(function (currentItem) {
       for (var key in currentFilter) {
-        if (!filters[key](currentItem, currentFilter[key])) {
+        if (!filters[key](currentItem, currentFilter[key], key)) {
           return false;
         }
       }
@@ -128,14 +140,8 @@
         currentFilter[filter] = target.value;
         break;
       case 'INPUT':
-        currentFilter[target.value] = target.id.split('-')[1];
-
-        if (target.hasAttribute('checked')) {
-          delete currentFilter[target.value];
-          target.toggleAttribute('checked');
-        } else {
-          target.toggleAttribute('checked');
-        }
+        currentFilter[target.value] = !target.hasAttribute('checked');
+        target.toggleAttribute('checked');
     }
     var tempPins = getFilteredPins();
     window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));

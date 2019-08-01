@@ -36,9 +36,7 @@
       for (var i = 1; i < photoPreviews.length; i++) {
         photoPreviews[i].remove();
       }
-
     },
-
   };
 
   // Отображение фото аватара
@@ -198,29 +196,6 @@
     }
   });
 
-  // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
-  var successUpload = function () {
-    mainElement.appendChild(successMessage);
-
-    var onMainElementClick = function () {
-      mainElement.removeChild(successMessage);
-      window.removeEventListener('click', onMainElementClick);
-      window.removeEventListener('keydown', onMainElementEscPress);
-    };
-
-    var onMainElementEscPress = function (evt) {
-      if (evt.keyCode === 27) {
-        mainElement.removeChild(successMessage);
-        window.removeEventListener('click', onMainElementClick);
-        window.removeEventListener('keydown', onMainElementEscPress);
-      }
-    };
-
-    window.addEventListener('click', onMainElementClick);
-    window.addEventListener('keydown', onMainElementEscPress);
-    window.main.disableActiveMode();
-  };
-
   // Кнопка очистить
   adFormReset.addEventListener('click', function (evt) {
     evt.preventDefault();
@@ -228,36 +203,47 @@
     window.main.disableActiveMode();
   });
 
+  // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
+  var successUpload = function () {
+    mainElement.appendChild(successMessage);
+
+    var closeSuccessMessage = function () {
+      mainElement.removeChild(successMessage);
+      window.removeEventListener('click', closeSuccessMessage);
+      window.removeEventListener('keydown', closeSuccessMessageEsc);
+    };
+
+    var closeSuccessMessageEsc = function (evt) {
+      if (evt.keyCode === 27) {
+        closeSuccessMessage();
+      }
+    };
+
+    window.addEventListener('click', closeSuccessMessage);
+    window.addEventListener('keydown', closeSuccessMessageEsc);
+    window.main.disableActiveMode();
+  };
+
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
   var unsuccessUpload = function () {
     mainElement.appendChild(errorMessage);
 
-    var onMainElementClick = function () {
+    var closeErrorMessage = function () {
       mainElement.removeChild(errorMessage);
-      window.removeEventListener('click', onMainElementClick);
-      window.removeEventListener('keydown', onMainElementEscPress);
-      errorButton.removeEventListener('click', onErrorButtonClick);
+      window.removeEventListener('click', closeErrorMessage);
+      window.removeEventListener('keydown', closeErrorMessageEsc);
+      errorButton.removeEventListener('click', closeErrorMessage);
     };
 
-    var onMainElementEscPress = function (evt) {
+    var closeErrorMessageEsc = function (evt) {
       if (evt.keyCode === 27) {
-        mainElement.removeChild(errorMessage);
-        window.removeEventListener('click', onMainElementClick);
-        window.removeEventListener('keydown', onMainElementEscPress);
-        errorButton.removeEventListener('click', onErrorButtonClick);
+        closeErrorMessage();
       }
     };
 
-    var onErrorButtonClick = function () {
-      mainElement.removeChild(errorMessage);
-      window.removeEventListener('click', onMainElementClick);
-      window.removeEventListener('keydown', onMainElementEscPress);
-      errorButton.removeEventListener('click', onErrorButtonClick);
-    };
-
-    window.addEventListener('click', onMainElementClick);
-    window.addEventListener('keydown', onMainElementEscPress);
-    errorButton.addEventListener('click', onErrorButtonClick);
+    window.addEventListener('click', closeErrorMessage);
+    window.addEventListener('keydown', closeErrorMessageEsc);
+    errorButton.addEventListener('click', closeErrorMessage);
   };
 
   // Отправляю данные на сервер
