@@ -9,6 +9,10 @@
   var MIN_COORDS_Y = 130;
   var MAX_COORDS_Y = 630;
 
+  var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+  var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
+  var minPinY = MIN_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
+  var maxPinY = MAX_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
   var mainPin = document.querySelector('.map__pin--main');
   var addressField = document.querySelector('input#address');
 
@@ -48,27 +52,22 @@
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
 
+      // Устанавливаю границы перетаскивания
+      if (parseInt(mainPin.style.left, 10) < minPinX) {
+        mainPin.style.left = minPinX + 'px';
+      }
+      if (parseInt(mainPin.style.left, 10) > maxPinX) {
+        mainPin.style.left = maxPinX + 'px';
+      }
+      if (parseInt(mainPin.style.top, 10) < minPinY) {
+        mainPin.style.top = minPinY + 'px';
+      }
+      if (parseInt(mainPin.style.top, 10) > maxPinY) {
+        mainPin.style.top = maxPinY + 'px';
+      }
+
       // Координаты соответстуют острому концу основного пина
       addressField.value = (parseInt(mainPin.style.left, 10) + MAIN_PIN_ACTIVE_SIZE_X / 2) + ', ' + (parseInt(mainPin.style.top, 10) + MAIN_PIN_ACTIVE_SIZE_Y);
-
-      (function () {
-        var minPinX = MIN_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
-        var maxPinX = MAX_COORDS_X - MAIN_PIN_ACTIVE_SIZE_X / 2;
-        var minPinY = MIN_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
-        var maxPinY = MAX_COORDS_Y - MAIN_PIN_ACTIVE_SIZE_Y;
-        if (parseInt(mainPin.style.left, 10) < minPinX) {
-          mainPin.style.left = minPinX + 'px';
-        }
-        if (parseInt(mainPin.style.left, 10) > maxPinX) {
-          mainPin.style.left = maxPinX + 'px';
-        }
-        if (parseInt(mainPin.style.top, 10) < minPinY) {
-          mainPin.style.top = minPinY + 'px';
-        }
-        if (parseInt(mainPin.style.top, 10) > maxPinY) {
-          mainPin.style.top = maxPinY + 'px';
-        }
-      })();
     };
 
     var onMouseUp = function (upEvt) {

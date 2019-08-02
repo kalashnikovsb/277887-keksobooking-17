@@ -17,9 +17,16 @@ window.main = {
     }
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    adForm.reset();
+
+    // Сбрасываю форму объявления
+    window.form.reset();
+
+    // Сбрасываю форму фильтроа
+    window.filters.reset();
+
     window.mainPinRestoreCoords();
-    window.pins.deletePins();
+    window.pins.delete();
+    window.card.delete();
     window.main.isActive = false;
   },
 
@@ -32,8 +39,9 @@ window.main = {
     }
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    // Загрузка данных с сервера
-    window.backend.load(window.pins.renderPins);
+
+    // Отображение начальных меток без фильтра
+    window.pins.render(window.pins.loadedData.slice(0, 5));
     window.main.isActive = true;
   }
 };
