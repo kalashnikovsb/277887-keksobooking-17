@@ -143,39 +143,6 @@
 
   });
 
-  // Синхронизация гостей с комнатами
-  guests.addEventListener('change', function (evt) {
-    Array.from(rooms.options).forEach(function (option) {
-      option.removeAttribute('disabled');
-    });
-
-    Array.from(rooms.options).forEach(function (option) {
-      if (evt.target.value > option.value) {
-        option.setAttribute('disabled', '');
-      }
-      if (option.value === evt.target.value) {
-        rooms.querySelector('[selected = \'\' ]').removeAttribute('selected');
-        option.setAttribute('selected', '');
-      }
-      if (option.value === '100') {
-        option.removeAttribute('selected');
-        option.setAttribute('disabled', '');
-      }
-    });
-
-    if (evt.target.value === '0') {
-      Array.from(rooms.options).forEach(function (option) {
-        if (option.value !== '100') {
-          option.setAttribute('disabled', '');
-          option.removeAttribute('selected');
-        } else {
-          option.removeAttribute('disabled');
-          option.setAttribute('selected', '');
-        }
-      });
-    }
-  });
-
   // Синхронизация времени заезда с выездом
   timeIn.addEventListener('change', function (evt) {
     var selectedOption = evt.target.value;
@@ -207,48 +174,48 @@
   var successUpload = function () {
     mainElement.appendChild(successMessage);
 
-    var closeSuccessMessage = function () {
+    var onWindowClick = function () {
       mainElement.removeChild(successMessage);
-      window.removeEventListener('click', closeSuccessMessage);
-      window.removeEventListener('keydown', closeSuccessMessageEsc);
+      window.removeEventListener('click', onWindowClick);
+      window.removeEventListener('keydown', onEscPress);
     };
 
-    var closeSuccessMessageEsc = function (evt) {
+    var onEscPress = function (evt) {
       if (evt.keyCode === 27) {
-        closeSuccessMessage();
+        onWindowClick();
       }
     };
 
-    window.addEventListener('click', closeSuccessMessage);
-    window.addEventListener('keydown', closeSuccessMessageEsc);
+    window.addEventListener('click', onWindowClick);
+    window.addEventListener('keydown', onEscPress);
     window.main.disableActiveMode();
   };
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
-  var unsuccessUpload = function () {
+  window.unsuccessUpload = function () {
     mainElement.appendChild(errorMessage);
 
-    var closeErrorMessage = function () {
+    var onWindowClick = function () {
       mainElement.removeChild(errorMessage);
-      window.removeEventListener('click', closeErrorMessage);
-      window.removeEventListener('keydown', closeErrorMessageEsc);
-      errorButton.removeEventListener('click', closeErrorMessage);
+      window.removeEventListener('click', onWindowClick);
+      window.removeEventListener('keydown', onEscPress);
+      errorButton.removeEventListener('click', onWindowClick);
     };
 
-    var closeErrorMessageEsc = function (evt) {
+    var onEscPress = function (evt) {
       if (evt.keyCode === 27) {
-        closeErrorMessage();
+        onWindowClick();
       }
     };
 
-    window.addEventListener('click', closeErrorMessage);
-    window.addEventListener('keydown', closeErrorMessageEsc);
-    errorButton.addEventListener('click', closeErrorMessage);
+    window.addEventListener('click', onWindowClick);
+    window.addEventListener('keydown', onEscPress);
+    errorButton.addEventListener('click', onWindowClick);
   };
 
   // Отправляю данные на сервер
   adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), successUpload, unsuccessUpload);
+    window.backend.upload(new FormData(adForm), successUpload, window.unsuccessUpload);
     evt.preventDefault();
   });
 

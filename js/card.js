@@ -1,7 +1,8 @@
 'use strict';
 (function () {
 
-  var mapPinsBlock = document.querySelector('.map__pins');
+  var map = document.querySelector('.map');
+  var filtersContainer = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var photoTemplate = document.querySelector('#card').content.querySelector('.popup__photo');
 
@@ -11,7 +12,7 @@
 
       // Проверяю лишние копии карточки, удаляю если есть
       if (document.querySelector('.map__card') !== null) {
-        mapPinsBlock.removeChild(document.querySelector('.map__card'));
+        map.removeChild(document.querySelector('.map__card'));
       }
 
       // Копирую шаблон и вставляю в блок карты
@@ -150,13 +151,13 @@
         }
       });
 
-      mapPinsBlock.appendChild(card);
+      map.insertBefore(card, filtersContainer);
 
     },
 
     delete: function () {
       if (document.querySelector('.map__card') !== null) {
-        mapPinsBlock.removeChild(document.querySelector('.map__card'));
+        map.removeChild(document.querySelector('.map__card'));
       }
     },
 
