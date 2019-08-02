@@ -108,14 +108,10 @@
   // Синхронизация комнат с гостями
   rooms.addEventListener('change', function (evt) {
 
-    // Убираю все disabled при изменении элемента формы
-    Array.from(guests.options).forEach(function (option) {
-      option.removeAttribute('disabled');
-    });
-
     // Остальные комнаты
     Array.from(guests.options).forEach(function (option) {
-      if (evt.target.value < option.value) {
+      option.removeAttribute('disabled');
+      if (+evt.target.value < +option.value) {
         option.setAttribute('disabled', '');
       }
       if (option.value === evt.target.value) {
