@@ -123,7 +123,7 @@
 //    window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
 //  });
 
-  var changeForm = function (evt) {
+  var onFormChange = function (evt) {
     evt.preventDefault();
     var target = evt.target;
     switch (evt.target.tagName) {
@@ -139,12 +139,12 @@
     window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
   };
 
-  filterForm.addEventListener('change', changeForm);
+  filterForm.addEventListener('change', onFormChange);
 
   var housingFeatures = document.querySelector('#housing-features');
   housingFeatures.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
-      changeForm(evt);
+      onFormChange(evt);
     }
   });
 

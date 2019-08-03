@@ -114,36 +114,24 @@
 
   // Синхронизация комнат с гостями
   rooms.addEventListener('change', function (evt) {
+    var RoomsToGuestsMap = {
+      '1': ['1'],
+      '2': ['2', '1'],
+      '3': ['3', '2', '1'],
+      '100': ['0']
+    };
+    var guestsOptions = guests.querySelectorAll('option');
+    var guestsValues = RoomsToGuestsMap[evt.target.value];
 
-    // Остальные комнаты
-    Array.from(guests.options).forEach(function (option) {
-      option.removeAttribute('disabled');
-      if (+evt.target.value < +option.value) {
-        option.setAttribute('disabled', '');
-      }
-      if (option.value === evt.target.value) {
-        guests.querySelector('[selected = \'\' ]').removeAttribute('selected');
-        option.setAttribute('selected', '');
-      }
-      if (option.value === '0') {
-        option.removeAttribute('selected');
-        option.setAttribute('disabled', '');
+    guestsOptions.forEach(function (element) {
+      element.removeAttribute('selected');
+      element.removeAttribute('disabled');
+      if (guestsValues.indexOf(element.value) === -1) {
+        element.setAttribute('disabled', '');
       }
     });
 
-    // 100 комнат
-    if (evt.target.value === '100') {
-      Array.from(guests.options).forEach(function (option) {
-        if (option.value !== '0') {
-          option.setAttribute('disabled', '');
-          option.removeAttribute('selected');
-        } else {
-          option.removeAttribute('disabled');
-          option.setAttribute('selected', '');
-        }
-      });
-    }
-
+    guests.value = guestsValues[0];
   });
 
   // Синхронизация времени заезда с выездом
