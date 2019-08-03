@@ -147,4 +147,16 @@
     window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
   });
 
+  // Нажатие Enter на элементах фильтра Checkbox
+  filterForm.addEventListener('keydown', function (evt) {
+
+    if (evt.target.tagName === 'INPUT' && evt.keyCode === 13) {
+      currentFilter[evt.target.value] = !evt.target.hasAttribute('checked');
+      evt.target.toggleAttribute('checked');
+    }
+    var tempPins = getFilteredPins();
+    window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
+
+  });
+
 })();
