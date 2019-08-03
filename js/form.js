@@ -10,7 +10,7 @@
   var rooms = document.querySelector('#room_number');
   var guests = document.querySelector('#capacity');
   var adFormReset = document.querySelector('.ad-form__reset');
-  var mainElement = document.querySelector('main');
+  var main = document.querySelector('main');
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var errorButton = errorMessage.querySelector('.error__button');
@@ -19,6 +19,13 @@
   var avatarDefaultSrc = 'img/muffin-grey.svg';
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoChooser = document.querySelector('.ad-form__input');
+  var escKeyCode = 27;
+  var photoHeight = 70;
+  var photoWidth = 70;
+  var minBungaloPrice = '0';
+  var minFlatPrice = '1000';
+  var minHousePrice = '5000';
+  var minPalacePrice = '10000';
 
   window.form = {
 
@@ -70,8 +77,8 @@
       reader.addEventListener('load', function () {
         var imgElement = document.createElement('img');
         var divElement = document.createElement('div');
-        imgElement.width = 70;
-        imgElement.height = 70;
+        imgElement.width = photoWidth;
+        imgElement.height = photoHeight;
         imgElement.alt = 'Изображение недвижимости';
         imgElement.src = reader.result;
         photoContainer.lastElementChild.appendChild(imgElement);
@@ -87,20 +94,20 @@
   housingTypeSelect.addEventListener('change', function (evt) {
     switch (evt.target.value) {
       case 'bungalo':
-        pricePerNightInput.placeholder = '0';
-        pricePerNightInput.min = '0';
+        pricePerNightInput.placeholder = minBungaloPrice;
+        pricePerNightInput.min = minBungaloPrice;
         break;
       case 'flat':
-        pricePerNightInput.placeholder = '1000';
-        pricePerNightInput.min = '1000';
+        pricePerNightInput.placeholder = minFlatPrice;
+        pricePerNightInput.min = minFlatPrice;
         break;
       case 'house':
-        pricePerNightInput.placeholder = '5000';
-        pricePerNightInput.min = '5000';
+        pricePerNightInput.placeholder = minHousePrice;
+        pricePerNightInput.min = minHousePrice;
         break;
       case 'palace':
-        pricePerNightInput.placeholder = '10000';
-        pricePerNightInput.min = '10000';
+        pricePerNightInput.placeholder = minPalacePrice;
+        pricePerNightInput.min = minPalacePrice;
         break;
     }
   });
@@ -167,51 +174,51 @@
   });
 
   // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
-  var successUpload = function () {
-    mainElement.appendChild(successMessage);
+  var onUploadSuccess = function () {
+    main.appendChild(successMessage);
 
     var onWindowClick = function () {
-      mainElement.removeChild(successMessage);
+      main.removeChild(successMessage);
       window.removeEventListener('click', onWindowClick);
-      window.removeEventListener('keydown', onEscPress);
+      window.removeEventListener('keydown', onWindowEscPress);
     };
 
-    var onEscPress = function (evt) {
-      if (evt.keyCode === 27) {
+    var onWindowEscPress = function (evt) {
+      if (evt.keyCode === escKeyCode) {
         onWindowClick();
       }
     };
 
     window.addEventListener('click', onWindowClick);
-    window.addEventListener('keydown', onEscPress);
+    window.addEventListener('keydown', onWindowEscPress);
     window.main.disableActiveMode();
   };
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
-  window.unsuccessUpload = function () {
-    mainElement.appendChild(errorMessage);
+  var onUploadError = function () {
+    main.appendChild(errorMessage);
 
     var onWindowClick = function () {
-      mainElement.removeChild(errorMessage);
+      main.removeChild(errorMessage);
       window.removeEventListener('click', onWindowClick);
-      window.removeEventListener('keydown', onEscPress);
+      window.removeEventListener('keydown', onWindowEscPress);
       errorButton.removeEventListener('click', onWindowClick);
     };
 
-    var onEscPress = function (evt) {
-      if (evt.keyCode === 27) {
+    var onWindowEscPress = function (evt) {
+      if (evt.keyCode === escKeyCode) {
         onWindowClick();
       }
     };
 
     window.addEventListener('click', onWindowClick);
-    window.addEventListener('keydown', onEscPress);
+    window.addEventListener('keydown', onWindowEscPress);
     errorButton.addEventListener('click', onWindowClick);
   };
 
   // Отправляю данные на сервер
   adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), successUpload, window.unsuccessUpload);
+    window.backend.upload(new FormData(adForm), onUploadSuccess, onUploadError);
     evt.preventDefault();
   });
 

@@ -25,8 +25,8 @@ window.main = {
     window.filters.reset();
 
     window.mainPinRestoreCoords();
-    window.pins.delete();
-    window.card.delete();
+    window.pins.remove();
+    window.card.remove();
     window.main.isActive = false;
   },
 

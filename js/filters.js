@@ -3,6 +3,9 @@
 
   var filterForm = document.querySelector('.map__filters');
   var featuresList = document.querySelectorAll('#housing-features .map__checkbox');
+  var enterKeyCode = 13;
+  var lowPrice = 10000;
+  var highPrice = 50000;
 
   // Экспорт
   window.filters = {
@@ -27,15 +30,8 @@
     },
   };
 
-  // Функции фильтрации:
   var filterType = function (currentItem, type) {
-    switch (type) {
-      case 'any':
-      case currentItem.offer.type:
-        return true;
-      default:
-        return false;
-    }
+    return type === 'any' || type === currentItem.offer.type;
   };
 
   var filterPrice = function (currentItem, string) {
@@ -43,45 +39,25 @@
     if (string === 'any') {
       return true;
     }
-    if (currentItem.offer.price < 10000) {
+    if (currentItem.offer.price < lowPrice) {
       textValue = 'low';
     }
-    if (currentItem.offer.price > 50000) {
+    if (currentItem.offer.price > highPrice) {
       textValue = 'high';
     }
-    if (currentItem.offer.price >= 10000 && currentItem.offer.price <= 50000) {
+    if (currentItem.offer.price >= lowPrice && currentItem.offer.price <= highPrice) {
       textValue = 'middle';
     }
-    switch (string) {
-      case textValue:
-        return true;
-      default:
-        return false;
-    }
+
+    return textValue === string;
   };
 
   var filterRooms = function (currentItem, rooms) {
-    if (rooms === 'any') {
-      return true;
-    }
-    switch (currentItem.offer.rooms) {
-      case +rooms:
-        return true;
-      default:
-        return false;
-    }
+    return rooms === 'any' || +rooms === currentItem.offer.rooms;
   };
 
   var filterGuests = function (currentItem, guests) {
-    if (guests === 'any') {
-      return true;
-    }
-    switch (currentItem.offer.guests) {
-      case +guests:
-        return true;
-      default:
-        return false;
-    }
+    return guests === 'any' || +guests === currentItem.offer.rooms;
   };
 
   var filterFeature = function (currentItem, isNecessary, feature) {
@@ -132,7 +108,23 @@
     return tempPins;
   };
 
-  filterForm.addEventListener('change', function (evt) {
+//  filterForm.addEventListener('change', function (evt) {
+//    var target = evt.target;
+//    switch (evt.target.tagName) {
+//      case 'SELECT':
+//        var filter = target.id.split('-')[1];
+//        currentFilter[filter] = target.value;
+//        break;
+//      case 'INPUT':
+//        currentFilter[target.value] = !target.hasAttribute('checked');
+//        target.toggleAttribute('checked');
+//    }
+//    var tempPins = getFilteredPins();
+//    window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
+//  });
+
+  var changeForm = function (evt) {
+    evt.preventDefault();
     var target = evt.target;
     switch (evt.target.tagName) {
       case 'SELECT':
@@ -145,18 +137,15 @@
     }
     var tempPins = getFilteredPins();
     window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
-  });
+  };
 
-  // Нажатие Enter на элементах фильтра Checkbox
-  filterForm.addEventListener('keydown', function (evt) {
+  filterForm.addEventListener('change', changeForm);
 
-    if (evt.target.tagName === 'INPUT' && evt.keyCode === 13) {
-      currentFilter[evt.target.value] = !evt.target.hasAttribute('checked');
-      evt.target.toggleAttribute('checked');
+  var housingFeatures = document.querySelector('#housing-features');
+  housingFeatures.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 13) {
+      changeForm(evt);
     }
-    var tempPins = getFilteredPins();
-    window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
-
   });
 
 })();

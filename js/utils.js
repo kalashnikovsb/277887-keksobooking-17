@@ -10,12 +10,13 @@
     },
 
     debounce: function (func, data) {
+      var milliseconds = 500;
       if (window.lastTimeout) {
         window.clearTimeout(window.lastTimeout);
       }
       window.lastTimeout = window.setTimeout(function () {
         func(data);
-      }, 500);
+      }, milliseconds);
     },
 
   };

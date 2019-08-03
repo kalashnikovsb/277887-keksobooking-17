@@ -5,6 +5,7 @@
   var filtersContainer = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var photoTemplate = document.querySelector('#card').content.querySelector('.popup__photo');
+  var escKeyCode = 27;
 
   window.card = {
 
@@ -29,7 +30,7 @@
       var featuresList = card.querySelectorAll('.popup__feature');
       var description = card.querySelector('.popup__description');
       var photosBlock = card.querySelector('.popup__photos');
-      var photosList;
+      var photos;
       var close = card.querySelector('.popup__close');
 
       // Проверка существования аватара и установка
@@ -132,9 +133,9 @@
           photosBlock.appendChild(photoTemplate.cloneNode(true));
         }
         // Найти все фото и установить им src
-        photosList = card.querySelectorAll('.popup__photo');
-        for (i = 0; i < photosList.length; i++) {
-          photosList[i].src = data.offer.photos[i];
+        photos = card.querySelectorAll('.popup__photo');
+        for (i = 0; i < photos.length; i++) {
+          photos[i].src = data.offer.photos[i];
         }
       }
 
@@ -145,7 +146,7 @@
       });
 
       window.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === 27) {
+        if (evt.keyCode === escKeyCode) {
           pinItem.classList.remove('map__pin--active');
           card.style.display = 'none';
         }
@@ -155,7 +156,7 @@
 
     },
 
-    delete: function () {
+    remove: function () {
       if (document.querySelector('.map__card') !== null) {
         map.removeChild(document.querySelector('.map__card'));
       }

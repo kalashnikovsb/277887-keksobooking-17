@@ -35,20 +35,20 @@
       return pinItem;
     },
 
-    render: function (pinsArray) {
+    render: function (pins) {
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < pinsArray.length; i++) {
+      for (var i = 0; i < pins.length; i++) {
         // Если нет поля offer то метка пропускается
-        if (!pinsArray[i].offer) {
+        if (!pins[i].offer) {
           continue;
         }
-        fragment.appendChild(window.pins.generate(pinsArray[i]));
+        fragment.appendChild(window.pins.generate(pins[i]));
       }
       mapPinsBlock.appendChild(fragment);
     },
 
     // Удаляет все метки кроме главной. Срабатывает только в активном режиме
-    delete: function () {
+    remove: function () {
       var mapPins = document.querySelectorAll('.map__pin');
       if (window.main.isActive) {
         for (var i = 0; i < mapPins.length; i++) {
@@ -60,17 +60,17 @@
     },
 
     refresh: function (arr) {
-      window.pins.delete();
+      window.pins.remove();
       window.pins.render(arr);
     },
 
   };
 
   // Изначально при удачной загрузке фильтрованные данные равны всем загруженным данным
-  var successLoad = function (data) {
+  var onLoadSuccess = function (data) {
     window.pins.loadedData = data;
   };
 
-  window.backend.load(successLoad);
+  window.backend.load(onLoadSuccess);
 
 })();
