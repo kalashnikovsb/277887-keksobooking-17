@@ -3,6 +3,7 @@
 
   var filterForm = document.querySelector('.map__filters');
   var featuresList = document.querySelectorAll('#housing-features .map__checkbox');
+  var housingFeatures = document.querySelector('#housing-features');
   var enterKeyCode = 13;
   var lowPrice = 10000;
   var highPrice = 50000;
@@ -108,23 +109,7 @@
     return tempPins;
   };
 
-//  filterForm.addEventListener('change', function (evt) {
-//    var target = evt.target;
-//    switch (evt.target.tagName) {
-//      case 'SELECT':
-//        var filter = target.id.split('-')[1];
-//        currentFilter[filter] = target.value;
-//        break;
-//      case 'INPUT':
-//        currentFilter[target.value] = !target.hasAttribute('checked');
-//        target.toggleAttribute('checked');
-//    }
-//    var tempPins = getFilteredPins();
-//    window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
-//  });
-
-  var onFormChange = function (evt) {
-    evt.preventDefault();
+  filterForm.addEventListener('change', function (evt) {
     var target = evt.target;
     switch (evt.target.tagName) {
       case 'SELECT':
@@ -137,14 +122,12 @@
     }
     var tempPins = getFilteredPins();
     window.utils.debounce(window.pins.refresh, tempPins.slice(0, 5));
-  };
+  });
 
-  filterForm.addEventListener('change', onFormChange);
-
-  var housingFeatures = document.querySelector('#housing-features');
+  // Нажатие Enter на иконке
   housingFeatures.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 13) {
-      onFormChange(evt);
+    if (evt.keyCode === enterKeyCode) {
+      evt.target.click();
     }
   });
 

@@ -3,12 +3,13 @@
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var adForm = document.querySelector('.ad-form');
-  var housingTypeSelect = document.querySelector('#type');
-  var pricePerNightInput = document.querySelector('#price');
+  var types = document.querySelector('#type');
+  var price = document.querySelector('#price');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
   var rooms = document.querySelector('#room_number');
   var guests = document.querySelector('#capacity');
+  var adFormFeatures = document.querySelector('.features');
   var adFormReset = document.querySelector('.ad-form__reset');
   var main = document.querySelector('main');
   var successMessage = document.querySelector('#success').content.querySelector('.success');
@@ -20,6 +21,7 @@
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoChooser = document.querySelector('.ad-form__input');
   var escKeyCode = 27;
+  var enterKeyCode = 13;
   var photoHeight = 70;
   var photoWidth = 70;
   var minBungaloPrice = '0';
@@ -91,23 +93,23 @@
 
   });
 
-  housingTypeSelect.addEventListener('change', function (evt) {
+  types.addEventListener('change', function (evt) {
     switch (evt.target.value) {
       case 'bungalo':
-        pricePerNightInput.placeholder = minBungaloPrice;
-        pricePerNightInput.min = minBungaloPrice;
+        price.placeholder = minBungaloPrice;
+        price.min = minBungaloPrice;
         break;
       case 'flat':
-        pricePerNightInput.placeholder = minFlatPrice;
-        pricePerNightInput.min = minFlatPrice;
+        price.placeholder = minFlatPrice;
+        price.min = minFlatPrice;
         break;
       case 'house':
-        pricePerNightInput.placeholder = minHousePrice;
-        pricePerNightInput.min = minHousePrice;
+        price.placeholder = minHousePrice;
+        price.min = minHousePrice;
         break;
       case 'palace':
-        pricePerNightInput.placeholder = minPalacePrice;
-        pricePerNightInput.min = minPalacePrice;
+        price.placeholder = minPalacePrice;
+        price.min = minPalacePrice;
         break;
     }
   });
@@ -151,6 +153,14 @@
       if (timeIn.options[i].value === selectedOption) {
         timeIn.options[i].selected = 'true';
       }
+    }
+  });
+
+  // Кнопки выбора особенностей
+  adFormFeatures.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === enterKeyCode) {
+      evt.preventDefault();
+      evt.target.click();
     }
   });
 
