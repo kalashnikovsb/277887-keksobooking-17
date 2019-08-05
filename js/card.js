@@ -1,11 +1,9 @@
 'use strict';
 (function () {
-
   var map = document.querySelector('.map');
   var filtersContainer = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var photoTemplate = document.querySelector('#card').content.querySelector('.popup__photo');
-  var escKeyCode = 27;
 
   window.card = {
 
@@ -146,7 +144,7 @@
       });
 
       window.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === escKeyCode) {
+        if (evt.keyCode === window.utils.ESC_KEY_CODE) {
           pinItem.classList.remove('map__pin--active');
           card.style.display = 'none';
         }

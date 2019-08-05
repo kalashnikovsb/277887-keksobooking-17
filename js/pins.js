@@ -67,10 +67,10 @@
   };
 
   // Изначально при удачной загрузке фильтрованные данные равны всем загруженным данным
-  var onLoadSuccess = function (data) {
+  var onDataSuccessLoad = function (data) {
     window.pins.loadedData = data;
   };
 
-  window.backend.load(onLoadSuccess);
+  window.backend.load(onDataSuccessLoad);
 
 })();

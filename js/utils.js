@@ -3,6 +3,9 @@
 
   window.utils = {
 
+    ESC_KEY_CODE: 27,
+    ENTER_KEY_CODE: 13,
+
     getRandomNumber: function (min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);

@@ -1,6 +1,12 @@
 'use strict';
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var PHOTO_HEIGHT = 70;
+  var PHOTO_WIDTH = 70;
+  var MIN_BUNGALO_PRICE = '0';
+  var MIN_FLAT_PRICE = '1000';
+  var MIN_HOUSE_PRICE = '5000';
+  var MIN_PALACE_PRICE = '10000';
 
   var adForm = document.querySelector('.ad-form');
   var types = document.querySelector('#type');
@@ -20,14 +26,6 @@
   var avatarDefaultSrc = 'img/muffin-grey.svg';
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoChooser = document.querySelector('.ad-form__input');
-  var escKeyCode = 27;
-  var enterKeyCode = 13;
-  var photoHeight = 70;
-  var photoWidth = 70;
-  var minBungaloPrice = '0';
-  var minFlatPrice = '1000';
-  var minHousePrice = '5000';
-  var minPalacePrice = '10000';
 
   window.form = {
 
@@ -79,8 +77,8 @@
       reader.addEventListener('load', function () {
         var imgElement = document.createElement('img');
         var divElement = document.createElement('div');
-        imgElement.width = photoWidth;
-        imgElement.height = photoHeight;
+        imgElement.width = PHOTO_WIDTH;
+        imgElement.height = PHOTO_HEIGHT;
         imgElement.alt = 'Изображение недвижимости';
         imgElement.src = reader.result;
         photoContainer.lastElementChild.appendChild(imgElement);
@@ -96,20 +94,20 @@
   types.addEventListener('change', function (evt) {
     switch (evt.target.value) {
       case 'bungalo':
-        price.placeholder = minBungaloPrice;
-        price.min = minBungaloPrice;
+        price.placeholder = MIN_BUNGALO_PRICE;
+        price.min = MIN_BUNGALO_PRICE;
         break;
       case 'flat':
-        price.placeholder = minFlatPrice;
-        price.min = minFlatPrice;
+        price.placeholder = MIN_FLAT_PRICE;
+        price.min = MIN_FLAT_PRICE;
         break;
       case 'house':
-        price.placeholder = minHousePrice;
-        price.min = minHousePrice;
+        price.placeholder = MIN_HOUSE_PRICE;
+        price.min = MIN_HOUSE_PRICE;
         break;
       case 'palace':
-        price.placeholder = minPalacePrice;
-        price.min = minPalacePrice;
+        price.placeholder = MIN_PALACE_PRICE;
+        price.min = MIN_PALACE_PRICE;
         break;
     }
   });
@@ -141,7 +139,7 @@
     var selectedOption = evt.target.value;
     for (var i = 0; i < timeIn.children.length; i++) {
       if (timeOut.options[i].value === selectedOption) {
-        timeOut.options[i].selected = 'true';
+        timeOut.options[i].selected = true;
       }
     }
   });
@@ -151,14 +149,14 @@
     var selectedOption = evt.target.value;
     for (var i = 0; i < timeOut.children.length; i++) {
       if (timeIn.options[i].value === selectedOption) {
-        timeIn.options[i].selected = 'true';
+        timeIn.options[i].selected = true;
       }
     }
   });
 
   // Кнопки выбора особенностей
   adFormFeatures.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === enterKeyCode) {
+    if (evt.keyCode === window.utils.ENTER_KEY_CODE) {
       evt.preventDefault();
       evt.target.click();
     }
@@ -172,7 +170,7 @@
   });
 
   // Успешная отправка данных. Возврат неактивного состояния и отображение сообщения
-  var onUploadSuccess = function () {
+  var onDataSuccessUpload = function () {
     main.appendChild(successMessage);
 
     var onWindowClick = function () {
@@ -182,7 +180,7 @@
     };
 
     var onWindowEscPress = function (evt) {
-      if (evt.keyCode === escKeyCode) {
+      if (evt.keyCode === window.utils.ESC_KEY_CODE) {
         onWindowClick();
       }
     };
@@ -193,7 +191,7 @@
   };
 
   // Неуспешная отправка, окно закрывается при нажатии на кнопку
-  var onUploadError = function () {
+  var onDataErrorUpload = function () {
     main.appendChild(errorMessage);
 
     var onWindowClick = function () {
@@ -204,7 +202,7 @@
     };
 
     var onWindowEscPress = function (evt) {
-      if (evt.keyCode === escKeyCode) {
+      if (evt.keyCode === window.utils.ESC_KEY_CODE) {
         onWindowClick();
       }
     };
@@ -216,7 +214,7 @@
 
   // Отправляю данные на сервер
   adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), onUploadSuccess, onUploadError);
+    window.backend.upload(new FormData(adForm), onDataSuccessUpload, onDataErrorUpload);
     evt.preventDefault();
   });
 

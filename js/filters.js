@@ -1,12 +1,11 @@
 'use strict';
 (function () {
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
 
   var filterForm = document.querySelector('.map__filters');
   var featuresList = document.querySelectorAll('#housing-features .map__checkbox');
   var housingFeatures = document.querySelector('#housing-features');
-  var enterKeyCode = 13;
-  var lowPrice = 10000;
-  var highPrice = 50000;
 
   // Экспорт
   window.filters = {
@@ -40,13 +39,13 @@
     if (string === 'any') {
       return true;
     }
-    if (currentItem.offer.price < lowPrice) {
+    if (currentItem.offer.price < LOW_PRICE) {
       textValue = 'low';
     }
-    if (currentItem.offer.price > highPrice) {
+    if (currentItem.offer.price > HIGH_PRICE) {
       textValue = 'high';
     }
-    if (currentItem.offer.price >= lowPrice && currentItem.offer.price <= highPrice) {
+    if (currentItem.offer.price >= LOW_PRICE && currentItem.offer.price <= HIGH_PRICE) {
       textValue = 'middle';
     }
 
@@ -58,7 +57,7 @@
   };
 
   var filterGuests = function (currentItem, guests) {
-    return guests === 'any' || +guests === currentItem.offer.rooms;
+    return guests === 'any' || +guests === currentItem.offer.guests;
   };
 
   var filterFeature = function (currentItem, isNecessary, feature) {
@@ -126,7 +125,7 @@
 
   // Нажатие Enter на иконке
   housingFeatures.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === enterKeyCode) {
+    if (evt.keyCode === window.utils.ENTER_KEY_CODE) {
       evt.target.click();
     }
   });
